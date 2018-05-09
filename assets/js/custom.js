@@ -13,7 +13,7 @@ jQuery(document).ready(function () {
 	/*
 		Final Countdown Settings
 	*/
-	var finalDate = '2018/04/30';
+	var finalDate = '2018/07/30';
 
 	$('div.counter').countdown(finalDate)
 		.on('update.countdown', function (event) {
