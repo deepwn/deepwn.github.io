@@ -1,0 +1,10 @@
+<script>
+  const appList = {'hack.icu':'https://hack.icu/login'};
+  const searchParams = new URLSearchParams(location.search.substr(1));
+  const app = searchParams.get('app');
+  if (app) {
+    const loginTo = new URL(appList[app]);
+    loginTo.search = searchParams.toString();
+    location.replace(loginTo);
+  }  
+</script>
