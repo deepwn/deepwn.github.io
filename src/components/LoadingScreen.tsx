@@ -3,9 +3,10 @@ import { GlitchText } from "@/components/GlitchText";
 
 interface LoadingScreenProps {
   message?: string;
+  stage?: string;
 }
 
-export function LoadingScreen({ message = "Loading..." }: LoadingScreenProps) {
+export function LoadingScreen({ message = "Loading...", stage }: LoadingScreenProps) {
   const [dots, setDots] = useState("");
 
   // Animate dots
@@ -62,11 +63,19 @@ export function LoadingScreen({ message = "Loading..." }: LoadingScreenProps) {
         </div>
 
         {/* Loading text */}
-        <div className="flex items-center space-x-2">
-          <GlitchText text={message} />
-          <span className="text-green-500 font-mono text-lg w-12 text-left">
-            {dots}
-          </span>
+        <div className="flex flex-col items-center space-y-3">
+          <div className="flex items-center space-x-2">
+            <GlitchText text={message} />
+            <span className="text-green-500 font-mono text-lg w-12 text-left">
+              {dots}
+            </span>
+          </div>
+          {/* Stage indicator */}
+          {stage && (
+            <div className="text-xs text-gray-500 font-mono animate-pulse">
+              {stage}
+            </div>
+          )}
         </div>
 
         {/* Progress bar */}
@@ -152,7 +161,7 @@ export function LoadingError({ message, errorDetails, onRetry }: LoadingErrorPro
               onClick={() => setShowDetails(!showDetails)}
               className="flex items-center justify-center w-full gap-2 px-4 py-2 text-xs font-mono text-gray-500 hover:text-gray-300 transition-colors"
             >
-              <span>{showDetails ? "▼ Hide details" : "▶ Show details"}</span>
+              <span>{showDetails ? "↓ Hide details" : "→ Show details"}</span>
             </button>
 
             {showDetails && (

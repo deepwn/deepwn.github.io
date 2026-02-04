@@ -58,7 +58,8 @@
     "hidden_repos": ["deepwn.github.io"]
   },
   "memberFilter": {
-    "append_users": ["evil7", "5up3rc", "Dk0n9", "firstC99", "jhdxr", "l3m0n", "mzeyong", "okadwin", "WhoisX", "wyattzheng", "ZacharyZcR", "sususu416"],
+    "append_users": ["sususu416"],
+    "hidden_users": 9,
     "owner": "evil7"
   },
   "customLinks": {

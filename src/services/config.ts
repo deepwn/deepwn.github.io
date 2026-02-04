@@ -140,6 +140,8 @@ export interface CustomLinksConfig {
 export interface MemberFilterConfig {
   /** Array of GitHub usernames to append to the member list */
   append_users?: string[];
+  /** Number of hidden/secret user placeholders to display */
+  hidden_users?: number;
   /** Owner username who will be highlighted with a special indicator */
   owner?: string;
 }

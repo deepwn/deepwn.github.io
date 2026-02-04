@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { GithubMember } from "@/services/github";
+import { HiddenUserCard } from "@/components/HiddenUserCard";
+import { FaChessKing, FaUser } from "react-icons/fa";
 
 interface MembersSectionProps {
   members: GithubMember[];
   /** Username of the organization owner for special highlighting */
   owner?: string;
+  /** Number of hidden/secret user placeholders to display */
+  hiddenUsers?: number;
 }
 
-export function MembersSection({ members, owner }: MembersSectionProps) {
+export function MembersSection({ members, owner, hiddenUsers = 0 }: MembersSectionProps) {
   const [loadedAvatars, setLoadedAvatars] = useState<Set<number>>(new Set());
 
   const handleAvatarLoad = (memberId: number) => {
@@ -29,7 +33,7 @@ export function MembersSection({ members, owner }: MembersSectionProps) {
             <p className="text-gray-500 mt-2 text-sm md:text-base">A young, active and innovative team</p>
           </div>
           <span className="text-xs md:text-sm text-gray-300 font-mono bg-white/5 px-3 py-1 rounded-full">
-            {members.length} {members.length === 1 ? "member" : "members"}
+            {members.length + hiddenUsers} {members.length + hiddenUsers === 1 ? "member" : "members"}
           </span>
         </div>
         <div className="h-px w-full bg-gradient-to-r from-green-500/30 to-transparent" />
@@ -38,6 +42,7 @@ export function MembersSection({ members, owner }: MembersSectionProps) {
       {/* Members Grid */}
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {/* Render regular members */}
           {members.map((member, index) => (
             <a
               key={member.id}
@@ -67,13 +72,13 @@ export function MembersSection({ members, owner }: MembersSectionProps) {
                   {/* Member indicator - different styles for owner vs regular member */}
                   {owner && member.login === owner ? (
                     // Owner: Star badge with blue color
-                    <div className="absolute bottom-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600">
-                      <span className="text-white text-xs">★</span>
+                    <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600">
+                      <FaChessKing className="text-white text-xs" />
                     </div>
                   ) : (
                     // Regular member: User badge with green color
-                    <div className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-green-600">
-                      <span className="text-white text-xs"></span>
+                    <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-green-600">
+                      <FaUser className="text-white text-xs" />
                     </div>
                   )}
                 </div>
@@ -85,6 +90,14 @@ export function MembersSection({ members, owner }: MembersSectionProps) {
                 <p className="text-xs text-gray-600 group-hover:text-gray-500 transition-colors duration-200">{owner && member.login === owner ? "Owner" : "User"}</p>
               </div>
             </a>
+          ))}
+
+          {/* Hidden user placeholders */}
+          {Array.from({ length: hiddenUsers }).map((_, index) => (
+            <HiddenUserCard
+              key={`hidden-${index}`}
+              size={80}
+            />
           ))}
         </div>
       </div>

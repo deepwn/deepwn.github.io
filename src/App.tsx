@@ -11,6 +11,7 @@ import { LoadingScreen, LoadingError } from "@/components/LoadingScreen";
 
 function App2() {
   const [loading, setLoading] = useState(true);
+  const [loadingStage, setLoadingStage] = useState<string>("initializing...");
   const [error, setError] = useState<{ message: string; details?: string } | null>(null);
   const [profile, setProfile] = useState<GithubProfile | null>(null);
   const [repos, setRepos] = useState<GithubRepo[]>([]);
@@ -19,12 +20,14 @@ function App2() {
   const [customLinks, setCustomLinks] = useState<CustomLinksConfig | undefined>(undefined);
   const [members, setMembers] = useState<GithubMember[]>([]);
   const [owner, setOwner] = useState<string | undefined>(undefined);
+  const [hiddenUsers, setHiddenUsers] = useState<number>(0);
   const projectsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const initData = async () => {
       try {
         setLoading(true);
+        setLoadingStage("get config...");
         const cfg = await fetchConfig();
 
         if (cfg.typography) {
@@ -46,6 +49,7 @@ function App2() {
         const accountType: 'user' | 'org' = cfg.type === 'org' ? 'org' : 'user';
         
         // Fetch profile with account type for optimized API calls
+        setLoadingStage("get profile...");
         const userProfile = await fetchProfile(cfg.baseAccount, accountType);
         setProfile(userProfile);
 
@@ -53,17 +57,24 @@ function App2() {
         const resolvedAccountType = userProfile?.type === "Organization" ? "org" : "user";
         
         // Fetch repos with resolved account type for correct API endpoint
+        setLoadingStage("get repos...");
         const userRepos = await fetchRepos(cfg.baseAccount, resolvedAccountType, cfg.repoFilter);
         setRepos(userRepos);
 
         // Fetch members only for organizations
         if (accountType === 'org') {
           try {
+            setLoadingStage("get list of members...");
             let orgMembers = await fetchMembers(cfg.baseAccount);
 
             // Handle memberFilter configuration
             if (cfg.memberFilter) {
-              const { append_users, owner: ownerUsername } = cfg.memberFilter;
+              const { append_users, hidden_users, owner: ownerUsername } = cfg.memberFilter;
+
+              // Set hidden users count for display
+              if (hidden_users !== undefined) {
+                setHiddenUsers(hidden_users);
+              }
 
               // Set owner for display in MembersSection
               if (ownerUsername) {
@@ -126,7 +137,7 @@ function App2() {
 
   // Show loading screen while fetching data
   if (loading) {
-    return <LoadingScreen message="Fetching GitHub data" />;
+    return <LoadingScreen message="Loading" stage={loadingStage} />;
   }
 
   // Show error screen if loading failed
@@ -164,7 +175,7 @@ function App2() {
           profile={profile}
         />
 
-        <MembersSection members={members} owner={owner} />
+        <MembersSection members={members} owner={owner} hiddenUsers={hiddenUsers} />
 
         <Footer profile={profile} />
       </div>
