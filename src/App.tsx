@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import GlitchPage from "@/components/GlitchPage";
-import { fetchConfig, fetchProfile, fetchRepos, fetchMembers } from "@/services/github";
+import { fetchConfig, fetchProfile, fetchRepos, fetchMembers, fetchUserByUsername } from "@/services/github";
 import type { GithubProfile, GithubRepo, GithubMember } from "@/services/github";
 import type { TypographySettings, LogoConfig, CustomLinksConfig } from "@/services/config";
 import { HeroSection } from "@/components/HeroSection";
@@ -18,6 +18,7 @@ function App2() {
   const [logoConfig, setLogoConfig] = useState<LogoConfig | null>(null);
   const [customLinks, setCustomLinks] = useState<CustomLinksConfig | undefined>(undefined);
   const [members, setMembers] = useState<GithubMember[]>([]);
+  const [owner, setOwner] = useState<string | undefined>(undefined);
   const projectsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,7 +59,49 @@ function App2() {
         // Fetch members only for organizations
         if (accountType === 'org') {
           try {
-            const orgMembers = await fetchMembers(cfg.baseAccount);
+            let orgMembers = await fetchMembers(cfg.baseAccount);
+
+            // Handle memberFilter configuration
+            if (cfg.memberFilter) {
+              const { append_users, owner: ownerUsername } = cfg.memberFilter;
+
+              // Set owner for display in MembersSection
+              if (ownerUsername) {
+                setOwner(ownerUsername);
+              }
+
+              // Fetch and append additional users
+              if (append_users && append_users.length > 0) {
+                const appendMembers: GithubMember[] = [];
+                for (const username of append_users) {
+                  try {
+                    const user = await fetchUserByUsername(username);
+                    if (user) {
+                      appendMembers.push({
+                        ...user,
+                        isOwner: username === ownerUsername,
+                      });
+                    }
+                  } catch (err) {
+                    console.debug(`Failed to fetch user ${username}:`, err);
+                  }
+                }
+
+                // Merge and deduplicate members
+                if (appendMembers.length > 0) {
+                  const existingIds = new Set(orgMembers.map(m => m.id));
+                  const newMembers = appendMembers.filter(m => !existingIds.has(m.id));
+                  orgMembers = [...orgMembers, ...newMembers];
+                }
+              } else if (ownerUsername) {
+                // Mark owner in existing members if not in append_users
+                orgMembers = orgMembers.map(m => ({
+                  ...m,
+                  isOwner: m.login === ownerUsername,
+                }));
+              }
+            }
+
             setMembers(orgMembers);
           } catch (err) {
             console.debug("Failed to fetch organization members:", err);
@@ -121,7 +164,7 @@ function App2() {
           profile={profile}
         />
 
-        <MembersSection members={members} />
+        <MembersSection members={members} owner={owner} />
 
         <Footer profile={profile} />
       </div>

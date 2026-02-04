@@ -136,6 +136,14 @@ export interface CustomLinksConfig {
   links: CustomLink[];
 }
 
+// Member filtering and additional members configuration
+export interface MemberFilterConfig {
+  /** Array of GitHub usernames to append to the member list */
+  append_users?: string[];
+  /** Owner username who will be highlighted with a special indicator */
+  owner?: string;
+}
+
 // Main application configuration
 export interface AppConfig {
   baseAccount: string;
@@ -144,6 +152,8 @@ export interface AppConfig {
   website?: WebsiteConfig;
   /** Repository filtering configuration */
   repoFilter?: RepoFilterConfig;
+  /** Member filtering and additional members configuration */
+  memberFilter?: MemberFilterConfig;
   /** Custom links configuration */
   customLinks?: CustomLinksConfig;
   typography?: Partial<TypographySettings>;

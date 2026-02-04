@@ -57,6 +57,10 @@
   "repoFilter": {
     "hidden_repos": []
   },
+  "memberFilter": {
+    "append_users": [],
+    "owner": ""
+  },
   "customLinks": {
     "enabled": true,
     "links": [

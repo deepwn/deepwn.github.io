@@ -482,6 +482,8 @@ export interface GithubMember {
   id: number;
   avatar_url: string;
   html_url: string;
+  /** Whether this member is the organization owner */
+  isOwner?: boolean;
 }
 
 export const fetchMembers = async (orgName: string): Promise<GithubMember[]> => {
@@ -517,4 +519,36 @@ export const fetchMembers = async (orgName: string): Promise<GithubMember[]> => 
     () => fetchMembersGraphQL(orgName),
     'members'
   );
+};
+
+/**
+ * Fetch a single GitHub user by username and convert to GithubMember format
+ */
+export const fetchUserByUsername = async (username: string): Promise<GithubMember | null> => {
+  const endpoint = `https://api.github.com/users/${username}`;
+
+  const response = await fetch(endpoint, {
+    headers: {
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
+    }
+  });
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      console.debug(`[API] User not found: ${username}`);
+      return null;
+    }
+    throw new Error(`Failed to fetch user ${username}: ${response.status} ${response.statusText}`);
+  }
+
+  const userData = await response.json();
+
+  return {
+    login: userData.login,
+    id: userData.id,
+    avatar_url: userData.avatar_url,
+    html_url: userData.html_url,
+  };
 };
