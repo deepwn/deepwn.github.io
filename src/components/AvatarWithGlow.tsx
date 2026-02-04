@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { GithubProfile, LogoConfig } from "@/services/github";
+import type { GithubProfile } from "@/services/github";
+import type { LogoConfig } from "@/services/config";
 
 interface AvatarWithGlowProps {
   profile: GithubProfile | null;

@@ -1,128 +1,5 @@
-export interface TypographyConfig {
-  enabled: boolean;
-  fontSize: string;
-  fontSizeMd?: string;
-  fontSizeLg?: string;
-  color: string;
-  fontWeight?: string;
-  /** Vertical spacing between name and bio (default: 4) */
-  spacing?: number;
-  gradient?: {
-    enabled: boolean;
-    from: string;
-    via: string;
-    to: string;
-  };
-  glow?: {
-    enabled: boolean;
-    intensity: 'low' | 'medium' | 'high';
-  };
-  animation?: {
-    enabled: boolean;
-    type: 'pulse' | 'text-glow' | 'float';
-  };
-}
-
-export interface BioTypographyConfig {
-  enabled: boolean;
-  fontSize: string;
-  fontSizeMd?: string;
-  color: string;
-  fontWeight: string;
-  /** Optional gradient for bio text */
-  gradient?: {
-    enabled: boolean;
-    from: string;
-    via?: string;
-    to: string;
-  };
-  glow?: {
-    enabled: boolean;
-    intensity: 'low' | 'medium' | 'high';
-  };
-  animation?: {
-    enabled: boolean;
-    type: 'pulse' | 'text-glow' | 'float';
-  };
-}
-
-export interface LogoConfig {
-  enabled: boolean;
-  shape: 'circle' | 'square' | 'none';
-  border: boolean;
-  borderColor: string;
-  borderWidth: string;
-  /** Custom image URL to replace GitHub avatar - if set, this image is used instead of GitHub avatar */
-  src?: string;
-  /** Logo link URL - if set, logo becomes clickable link */
-  href?: string;
-  /** Logo size scale (default: 1) - multiplier for base size, e.g., 1.5 for 1.5x size */
-  scale?: number;
-  onlineIndicator: {
-    enabled: boolean;
-    color: string;
-  };
-}
-
-export interface TeamTypographyConfig {
-  enabled: boolean;
-  label: string;
-  fontSize: string;
-  fontSizeMd?: string;
-  fontWeight: string;
-  textColor: string;
-  background: string;
-  borderColor: string;
-  indicator?: {
-    enabled: boolean;
-    color: string;
-    animate: boolean;
-  };
-}
-
-export interface TypographySettings {
-  name: TypographyConfig;
-  bio: BioTypographyConfig;
-  logo: LogoConfig;
-  team: TeamTypographyConfig;
-}
-
-export interface RepoFilterConfig {
-  /** Array of repository names to hide (blacklist) - takes priority over whitelist */
-  hidden_repos?: string[];
-  /** Array of repository names to show (whitelist) - ignored if hidden_repos is set */
-  listing_repos?: string[];
-}
-
-export interface CustomLink {
-  /** Button label text */
-  label: string;
-  /** Target URL to navigate to */
-  url: string;
-  /** Lucide icon name (optional, without 'Icon' suffix) */
-  icon?: string;
-  /** Button style variant */
-  variant?: 'default' | 'outline' | 'ghost';
-  /** Custom color class */
-  color?: string;
-}
-
-export interface CustomLinksConfig {
-  /** Whether to show custom links section */
-  enabled: boolean;
-  /** Array of custom link buttons */
-  links: CustomLink[];
-}
-
-export interface AppConfig {
-  baseAccount: string;
-  type?: 'user' | 'org';
-  /** Repository filtering configuration */
-  repoFilter?: RepoFilterConfig;
-  /** Custom links configuration */
-  customLinks?: CustomLinksConfig;
-  typography?: Partial<TypographySettings>;
-}
+// Import App configuration types from config.ts
+import type { AppConfig, RepoFilterConfig } from './config';
 
 export interface GithubProfile {
   login: string;
@@ -138,8 +15,10 @@ export interface GithubProfile {
   company: string;
   created_at: string;
   type: 'User' | 'Organization';
-  twitter_username?: string;
-  email?: string;
+  twitter_username?: string | null;
+  email?: string | null;
+  /** Organization-only fields */
+  members_count?: number;
 }
 
 export interface GithubRepo {
@@ -147,7 +26,7 @@ export interface GithubRepo {
   name: string;
   html_url: string;
   description: string;
-  language: string;
+  language: string | null;
   stargazers_count: number;
   forks_count: number;
   updated_at: string;
@@ -164,11 +43,15 @@ export const fetchConfig = async (): Promise<AppConfig> => {
 };
 
 // GraphQL API helper - returns null if no token or error
-const fetchGraphQL = async <T>(query: string, variables: Record<string, unknown> = {}): Promise<T | null> => {
+const fetchGraphQL = async <T>(
+  query: string,
+  variables: Record<string, unknown> = {},
+  operationName?: string
+): Promise<T | null> => {
   const token = import.meta.env?.VITE_GITHUB_TOKEN;
 
   if (!token) {
-    console.warn('[GraphQL] No token available, skipping GraphQL request');
+    console.debug('[GraphQL] No token available, skipping GraphQL request');
     return null;
   }
 
@@ -179,17 +62,17 @@ const fetchGraphQL = async <T>(query: string, variables: Record<string, unknown>
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ query, variables }),
+      body: JSON.stringify({ query, variables, operationName }),
     });
 
     if (!response.ok) {
-      console.warn('[GraphQL] Request failed with status:', response.status);
+      console.warn(`[GraphQL] Request failed with status: ${response.status}`);
       return null;
     }
 
     const data = await response.json();
 
-    if (data.errors) {
+    if (data.errors && data.errors.length > 0) {
       console.warn('[GraphQL] Response contains errors:', data.errors);
       return null;
     }
@@ -201,32 +84,37 @@ const fetchGraphQL = async <T>(query: string, variables: Record<string, unknown>
   }
 };
 
-// Unified fallback fetcher: GraphQL → REST
-async function fetchWithFallback<T>(
-  graphqlFn: () => Promise<T | null>,
+// Primary fetcher: REST API (always works for public data)
+// Enhanced fetcher: GraphQL API (only works with token, provides more data)
+async function fetchWithEnhanced<T>(
   restFn: () => Promise<T>,
+  graphqlFn: () => Promise<T | null>,
   dataName: string
 ): Promise<T> {
-  // Step 1: Try GraphQL
-  try {
-    const graphqlResult = await graphqlFn();
-    if (graphqlResult) {
-      console.log(`[API] ✓ ${dataName} fetched via GraphQL`);
-      return graphqlResult;
-    }
-  } catch (error) {
-    console.warn(`[API] ✗ ${dataName} GraphQL failed:`, error instanceof Error ? error.message : error);
-  }
-
-  // Step 2: Try REST API
+  // Step 1: Try REST API (always works for public data)
   try {
     const restResult = await restFn();
     console.log(`[API] ✓ ${dataName} fetched via REST API`);
+
+    // Step 2: If token available, try GraphQL for potentially more data
+    const token = import.meta.env?.VITE_GITHUB_TOKEN;
+    if (token) {
+      try {
+        const graphqlResult = await graphqlFn();
+        if (graphqlResult) {
+          console.log(`[API] ✓ ${dataName} enhanced via GraphQL (logged in user)`);
+          return graphqlResult; // GraphQL provides richer data
+        }
+      } catch (error) {
+        console.debug(`[API] ℹ ${dataName} GraphQL enhancement skipped:`, error instanceof Error ? error.message : error);
+      }
+    }
+
     return restResult;
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : error;
-    console.warn(`[API] ✗ ${dataName} REST API failed:`, errorMessage);
-    throw new Error(`Failed to fetch ${dataName}: GraphQL failed, then REST API failed: ${errorMessage}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`[API] ✗ ${dataName} failed:`, errorMessage);
+    throw new Error(`Failed to fetch ${dataName}: ${errorMessage}`);
   }
 }
 
@@ -250,11 +138,30 @@ const PROFILE_QUERY = `
       websiteUrl
       company
       createdAt
-      ... on Organization {
-        members {
-          totalCount
-        }
+      twitterUsername
+      email
+    }
+  }
+`;
+
+const ORG_PROFILE_QUERY = `
+  query ($login: String!) {
+    organization(login: $login) {
+      login
+      name
+      avatarUrl
+      description
+      url
+      publicRepos
+      members {
+        totalCount
       }
+      location
+      websiteUrl
+      company
+      createdAt
+      twitterUsername
+      email
     }
   }
 `;
@@ -329,9 +236,11 @@ const MEMBERS_QUERY = `
 `;
 
 // GraphQL fetchers
-const fetchProfileGraphQL = async (username: string): Promise<GithubProfile | null> => {
+const fetchProfileGraphQL = async (username: string, type: 'user' | 'org'): Promise<GithubProfile | null> => {
+  const query = type === 'org' ? ORG_PROFILE_QUERY : PROFILE_QUERY;
+  
   const data = await fetchGraphQL<{
-    user: {
+    user?: {
       login: string;
       name: string;
       avatarUrl: string;
@@ -344,41 +253,82 @@ const fetchProfileGraphQL = async (username: string): Promise<GithubProfile | nu
       websiteUrl: string;
       company: string;
       createdAt: string;
+      twitterUsername?: string | null;
+      email?: string | null;
     };
-  }>(PROFILE_QUERY, { login: username });
+    organization?: {
+      login: string;
+      name: string;
+      avatarUrl: string;
+      description: string;
+      url: string;
+      publicRepos: number;
+      members: { totalCount: number };
+      followers: { totalCount: number };
+      location: string;
+      websiteUrl: string;
+      company: string;
+      createdAt: string;
+      twitterUsername?: string | null;
+      email?: string | null;
+    };
+  }>(query, { login: username });
 
-  if (!data?.user) return null;
+  if (!data) return null;
 
-  const user = data.user;
+  // Handle both user and organization responses
+  const userData = data.user || (data.organization as typeof data.user);
+  
+  if (!userData) return null;
+
   return {
-    login: user.login,
-    name: user.name || user.login,
-    avatar_url: user.avatarUrl,
-    bio: user.bio || '',
-    html_url: user.url,
-    public_repos: user.publicRepos,
-    followers: user.followers.totalCount,
-    following: user.following.totalCount,
-    location: user.location || '',
-    blog: user.websiteUrl || '',
-    company: user.company || '',
-    created_at: user.createdAt,
-    type: 'User',
+    login: userData.login,
+    name: userData.name || userData.login,
+    avatar_url: userData.avatarUrl,
+    bio: userData.bio || (data.organization?.description || ''),
+    html_url: userData.url,
+    public_repos: userData.publicRepos,
+    // Organizations don't have followers/following fields
+    followers: type === 'user' ? (userData.followers?.totalCount || 0) : 0,
+    following: type === 'user' ? (userData.following?.totalCount || 0) : 0,
+    location: userData.location || '',
+    blog: userData.websiteUrl || '',
+    company: userData.company || '',
+    created_at: userData.createdAt,
+    type: type === 'org' ? 'Organization' : 'User',
+    twitter_username: userData.twitterUsername || null,
+    email: userData.email || null,
+    members_count: data.organization?.members?.totalCount || undefined,
   };
 };
 
 const fetchReposGraphQL = async (username: string, type: 'user' | 'org'): Promise<GithubRepo[]> => {
   const query = type === 'org' ? ORG_REPOS_QUERY : REPOS_QUERY;
+  
+  // Define the actual GraphQL response type
+  interface GraphQLRepoNode {
+    id: number;
+    name: string;
+    url: string;
+    description: string | null;
+    primaryLanguage: { name: string } | null;
+    stargazerCount: number;
+    forkCount: number;
+    updatedAt: string;
+    topics: { nodes: Array<{ name: string }> };
+    homepageUrl: string | null;
+  }
+
   const data = await fetchGraphQL<{
-    user?: { repositories: { nodes: GithubRepo[] } };
-    organization?: { repositories: { nodes: GithubRepo[] } };
+    user?: { repositories: { nodes: GraphQLRepoNode[] } };
+    organization?: { repositories: { nodes: GraphQLRepoNode[] } };
   }>(query, { login: username, first: 100 });
 
   if (!data) return [];
 
   const reposData = type === 'org'
-    ? (data as { organization?: { repositories: { nodes: GithubRepo[] } } })?.organization?.repositories?.nodes
-    : (data as { user?: { repositories: { nodes: GithubRepo[] } } })?.user?.repositories?.nodes;
+    ? data.organization?.repositories?.nodes
+    : data.user?.repositories?.nodes;
 
   if (!reposData) return [];
 
@@ -420,21 +370,49 @@ const fetchMembersGraphQL = async (orgName: string): Promise<GithubMember[]> => 
   }));
 };
 
-export const fetchProfile = async (username: string): Promise<GithubProfile> => {
-  return fetchWithFallback(
-    () => fetchProfileGraphQL(username),
-    async () => {
-      const response = await fetch(`https://api.github.com/users/${username}`, {
+export const fetchProfile = async (username: string, type: 'user' | 'org' = 'user'): Promise<GithubProfile> => {
+  return fetchWithEnhanced<GithubProfile>(
+    async (): Promise<GithubProfile> => {
+      const endpoint = type === 'org'
+        ? `https://api.github.com/orgs/${username}`
+        : `https://api.github.com/users/${username}`;
+
+      const response = await fetch(endpoint, {
         headers: {
           'Accept': 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
           ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
         }
       });
-      if (!response.ok) throw new Error('Failed to fetch profile');
-      return response.json();
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${type} profile: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Normalize REST API response to match our interface
+      return {
+        login: data.login || data.login,
+        name: data.name || data.login,
+        avatar_url: data.avatar_url,
+        bio: data.bio || data.description || '',
+        html_url: data.html_url || data.url,
+        public_repos: data.public_repos || data.public_repos,
+        followers: data.followers || 0,
+        following: data.following || 0,
+        location: data.location || '',
+        blog: data.blog || data.website_url || '',
+        company: data.company || '',
+        created_at: data.created_at,
+        type: data.type || (type === 'org' ? 'Organization' : 'User'),
+        twitter_username: data.twitter_username || null,
+        email: data.email || null,
+        members_count: data.members_count || data.members || undefined,
+      };
     },
-    'profile'
+    () => fetchProfileGraphQL(username, type),
+    `profile (${type})`
   );
 };
 
@@ -443,8 +421,7 @@ export const fetchRepos = async (
   type: 'user' | 'org',
   repoFilter?: RepoFilterConfig
 ): Promise<GithubRepo[]> => {
-  const repos = await fetchWithFallback<GithubRepo[]>(
-    () => fetchReposGraphQL(username, type),
+  const repos = await fetchWithEnhanced<GithubRepo[]>(
     async () => {
       const endpoint = type === 'org'
         ? `https://api.github.com/orgs/${username}/repos?sort=updated&per_page=100`
@@ -457,14 +434,33 @@ export const fetchRepos = async (
           ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
         }
       });
-      if (!response.ok) throw new Error('Failed to fetch repositories');
-      return response.json();
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch repositories: ${response.status} ${response.statusText}`);
+      }
+
+      const reposData = await response.json();
+
+      // Normalize repository data to match our interface
+      return reposData.map((repo: Record<string, unknown>) => ({
+        id: repo.id,
+        name: repo.name,
+        html_url: repo.html_url,
+        description: repo.description || '',
+        language: repo.language || null,
+        stargazers_count: repo.stargazers_count || 0,
+        forks_count: repo.forks_count || 0,
+        updated_at: repo.updated_at,
+        topics: repo.topics || [],
+        homepage: repo.homepage || '',
+      }));
     },
+    () => fetchReposGraphQL(username, type),
     'repos'
   );
 
   // Sort by stars descending
-  const sortedRepos = repos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+  const sortedRepos = [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count);
 
   // Apply repository filtering based on config
   if (repoFilter) {
@@ -489,8 +485,7 @@ export interface GithubMember {
 }
 
 export const fetchMembers = async (orgName: string): Promise<GithubMember[]> => {
-  return fetchWithFallback<GithubMember[]>(
-    () => fetchMembersGraphQL(orgName),
+  return fetchWithEnhanced<GithubMember[]>(
     async () => {
       const response = await fetch(`https://api.github.com/orgs/${orgName}/members?per_page=100`, {
         headers: {
@@ -499,9 +494,27 @@ export const fetchMembers = async (orgName: string): Promise<GithubMember[]> => 
           ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
         }
       });
-      if (!response.ok) throw new Error('Failed to fetch members');
-      return response.json();
+
+      if (!response.ok) {
+        // Members API might fail for user accounts, return empty array gracefully
+        if (response.status === 404) {
+          console.debug(`[API] Members not available for ${orgName} (likely a user account)`);
+          return [];
+        }
+        throw new Error(`Failed to fetch members: ${response.status} ${response.statusText}`);
+      }
+
+      const membersData = await response.json();
+
+      // Normalize member data
+      return membersData.map((member: Record<string, unknown>) => ({
+        login: member.login,
+        id: member.id,
+        avatar_url: member.avatar_url,
+        html_url: member.html_url,
+      }));
     },
+    () => fetchMembersGraphQL(orgName),
     'members'
   );
 };

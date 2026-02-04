@@ -8,7 +8,7 @@ interface ScrollIndicatorProps {
 }
 
 export function ScrollIndicator({
-  label = "View Projects",
+  label = "More Info",
   onClick,
   scrollThreshold = 100,
 }: ScrollIndicatorProps) {

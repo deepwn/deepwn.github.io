@@ -1,4 +1,4 @@
-import type { TypographySettings } from "@/services/github";
+import type { TypographySettings } from "@/services/config";
 
 interface TeamSectionProps {
   typography: TypographySettings | null;

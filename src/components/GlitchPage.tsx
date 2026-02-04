@@ -386,7 +386,7 @@ const useMatrixAnimation = (
       // Handle smooth color transitions for any active particles
       if (smooth) {
         particlesRef.current.forEach((p) => {
-          if (p.updateColorTransition()) {
+          if (p?.updateColorTransition()) {
             needsRedraw = true;
           }
         });
@@ -440,14 +440,16 @@ const useMatrixAnimation = (
                y = y % totalH;
 
                // Draw main
-               p.draw(context, x, y);
+               p?.draw(context, x, y);
                
                // Wrap-around clones for edge continuity
-               if (x < CHAR_WIDTH) p.draw(context, x + totalW, y); // Left edge -> Right ghost
-               if (x > totalW - CHAR_WIDTH) p.draw(context, x - totalW, y); // Right edge -> Left ghost
-               
-               if (y < CHAR_HEIGHT) p.draw(context, x, y + totalH);
-               if (y > totalH - CHAR_HEIGHT) p.draw(context, x, y - totalH);
+               if (p) {
+                 if (x < CHAR_WIDTH) p.draw(context, x + totalW, y); // Left edge -> Right ghost
+                 if (x > totalW - CHAR_WIDTH) p.draw(context, x - totalW, y); // Right edge -> Left ghost
+                 
+                 if (y < CHAR_HEIGHT) p.draw(context, x, y + totalH);
+                 if (y > totalH - CHAR_HEIGHT) p.draw(context, x, y - totalH);
+               }
             }
         }
       }

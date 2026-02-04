@@ -1,6 +1,6 @@
 import { ExternalLink, Github, Twitter, Linkedin, Mail, Globe, BookOpen, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { CustomLinksConfig } from "@/services/github";
+import type { CustomLinksConfig } from "@/services/config";
 
 // Icon mapping for custom links
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {

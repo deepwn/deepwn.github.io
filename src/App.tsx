@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef, type GithubRepo } from "react";
+import { useState, useEffect, useRef } from "react";
 import GlitchPage from "@/components/GlitchPage";
 import { fetchConfig, fetchProfile, fetchRepos, fetchMembers } from "@/services/github";
-import type { GithubProfile, TypographySettings, LogoConfig, CustomLinksConfig, GithubMember } from "@/services/github";
+import type { GithubProfile, GithubRepo, GithubMember } from "@/services/github";
+import type { TypographySettings, LogoConfig, CustomLinksConfig } from "@/services/config";
 import { HeroSection } from "@/components/HeroSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { MembersSection } from "@/components/MembersSection";
@@ -26,7 +27,9 @@ function App2() {
         const cfg = await fetchConfig();
 
         if (cfg.typography) {
-          setTypography(cfg.typography);
+          // Cast to handle Partial<TypographySettings> to TypographySettings conversion
+          setTypography(cfg.typography as TypographySettings);
+          
           if (cfg.typography.logo) {
             setLogoConfig(cfg.typography.logo);
           }
@@ -37,27 +40,35 @@ function App2() {
           setCustomLinks(cfg.customLinks);
         }
 
-        const userProfile = await fetchProfile(cfg.baseAccount);
+        // Determine account type from config first, fallback to 'user'
+        // Note: The API response type is more authoritative, but we use config for initial call optimization
+        const accountType: 'user' | 'org' = cfg.type === 'org' ? 'org' : 'user';
+        
+        // Fetch profile with account type for optimized API calls
+        const userProfile = await fetchProfile(cfg.baseAccount, accountType);
         setProfile(userProfile);
 
-        const accountType = userProfile.type === "Organization" ? "org" : "user";
-        const userRepos = await fetchRepos(cfg.baseAccount, accountType, cfg.repoFilter);
+        // Re-determine account type from API response for subsequent calls (more reliable)
+        const resolvedAccountType = userProfile?.type === "Organization" ? "org" : "user";
+        
+        // Fetch repos with resolved account type for correct API endpoint
+        const userRepos = await fetchRepos(cfg.baseAccount, resolvedAccountType, cfg.repoFilter);
         setRepos(userRepos);
 
-        // Fetch members for organizations
-        if (accountType === "org") {
+        // Fetch members only for organizations
+        if (accountType === 'org') {
           try {
             const orgMembers = await fetchMembers(cfg.baseAccount);
             setMembers(orgMembers);
           } catch (err) {
-            console.error("Failed to fetch members:", err);
+            console.debug("Failed to fetch organization members:", err);
+            // Members might not be available for all orgs
           }
         }
       } catch (err) {
         console.error(err);
         const errorMessage = err instanceof Error ? err.message : "Failed to load GitHub data";
-        const errorDetails = err instanceof Error ? err.stack : undefined;
-        setError({ message: errorMessage, details: errorDetails });
+        setError({ message: errorMessage });
       } finally {
         setLoading(false);
       }
