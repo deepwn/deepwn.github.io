@@ -1,73 +1,386 @@
-# React + TypeScript + Vite
+# GitHub Profile Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个基于 React + TypeScript + Tailwind CSS 构建的现代化 GitHub 组织/个人主页模板。
 
-Currently, two official plugins are available:
+[查看示例](https://deepwn.github.io) · [配置文档](./public/config.example.md) · [快速开始](#部署到-github-pages)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 目录
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [特性](#特性)
+- [设计理念](#设计理念)
+- [预览](#预览)
+- [快速开始](#快速开始)
+- [配置指南](#配置指南)
+- [自定义样式](#自定义样式)
+- [部署](#部署)
+- [项目结构](#项目结构)
+- [技术栈](#技术栈)
+- [贡献](#贡献)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 特性
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 核心功能
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- 📊 **自动获取 GitHub 数据** - 自动拉取仓库、成员等信息
+- 🎨 **完全可定制** - 通过 `config.json` 轻松调整外观和行为
+- 📱 **响应式设计** - 完美适配手机、平板、桌面设备
+- 🌓 **暗色主题** - 专为 GitHub Pages 暗色背景优化
+- ⚡ **高性能** - 基于 Vite 构建，首屏加载快速
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 视觉效果
+
+- ✨ **渐变文字** - 支持多彩渐变效果
+- 🌟 **发光效果** - 增强暗色背景下的文字可读性
+- 🎯 **悬浮动画** - 项目卡片悬停交互效果
+- 🔗 **纹理背景** - 微妙的径向渐变和点阵纹理
+
+---
+
+## 设计理念
+
+### 1. 配置优先 (Configuration-First)
+
+本项目采用**声明式配置**理念，所有视觉和内容相关的调整都通过 `config.json` 完成，无需修改代码。
+
+```json
+{
+  "baseAccount": "your-username",
+  "type": "org"
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. GitHub 原生风格
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+设计遵循 GitHub 的视觉语言，保持与 GitHub 生态的一致性：
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 暗色主题配色方案
+- 圆角卡片设计
+- 毛玻璃背景效果
+- GitHub Actions 风格的状态指示器
+
+### 3. 零运维
+
+部署后无需服务器，所有内容由 GitHub 自动生成和维护：
+
+- GitHub Actions 自动构建
+- Cloudflare CDN 加速
+- 免费 HTTPS 证书
+- 自动更新内容
+
+---
+
+## 预览
+
+### 默认主题
+
 ```
+┌─────────────────────────────────────────┐
+│          Open to Collaborations         │
+├─────────────────────────────────────────┤
+│                                         │
+│              Website Name               │
+│         Your Bio / Description          │
+│      GitHub  •  Email  •  Twitter       │
+│                                         │
+├─────────────────────────────────────────┤
+│                                         │
+│           Featured Projects             │
+│    ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐      │
+│    │Card │ │Card │ │Card │ │Card │      │
+│    └─────┘ └─────┘ └─────┘ └─────┘      │
+│                                         │
+├─────────────────────────────────────────┤
+│                 Footer                  │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## 快速开始
+
+### 方法一：Fork 并部署
+
+1. **Fork 本仓库**
+
+   点击页面右上角的 [Fork](https://github.com/deepwn/deepwn.github.io/fork) 按钮
+
+2. **修改仓库名称**
+
+   将仓库重命名为 `<your-username>.github.io`
+
+3. **配置你的信息**
+
+   编辑 `public/config.json`：
+
+   ```json
+   {
+     "baseAccount": "your-github-username",
+     "type": "user"
+   }
+   ```
+
+4. **启用 GitHub Pages**
+
+   进入仓库 **Settings → Pages**，将 Source 设置为 `main` 分支
+
+5. **等待部署**
+
+   几分钟后，你的个人主页将上线于 `https://<your-username>.github.io`
+
+### 方法二：克隆并本地开发
+
+```bash
+# 克隆仓库
+git clone https://github.com/deepwn/deepwn.github.io.git
+cd deepwn.github.io
+
+# 安装依赖
+bun install
+
+# 启动开发服务器
+bun dev
+```
+
+---
+
+## 配置指南
+
+### 基础配置
+
+```json
+{
+  "baseAccount": "your-username",
+  "type": "user"
+}
+```
+
+| 字段          | 说明                  |
+| ------------- | --------------------- |
+| `baseAccount` | GitHub 用户名或组织名 |
+| `type`        | `"user"` 或 `"org"`   |
+
+### 网站设置
+
+```json
+{
+  "website": {
+    "title": "Your Name",
+    "favicon": "/favicon.svg"
+  }
+}
+```
+
+### 排版定制
+
+```json
+{
+  "typography": {
+    "name": {
+      "enabled": false,
+      "fontSize": "text-5xl"
+    },
+    "bio": {
+      "enabled": true,
+      "fontSize": "text-lg"
+    },
+    "team": {
+      "enabled": true,
+      "label": "Open to Collaborations"
+    }
+  }
+}
+```
+
+### 仓库过滤
+
+```json
+{
+  "repoFilter": {
+    "hidden_repos": ["archive-repo", "private-repo"]
+  }
+}
+```
+
+### 自定义链接
+
+```json
+{
+  "customLinks": {
+    "enabled": true,
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/your-username",
+        "icon": "FaGithub"
+      }
+    ]
+  }
+}
+```
+
+详细配置说明请参阅 [配置文档](./public/config.example.md)。
+
+---
+
+## 自定义样式
+
+### 添加全局样式
+
+编辑 `src/index.css`：
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义动画 */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 自定义背景 */
+body {
+  background: linear-gradient(to bottom, #0d1117 0%, #161b22 50%, #0d1117 100%);
+}
+```
+
+### 修改颜色主题
+
+项目使用 Tailwind CSS，所有颜色可通过 Tailwind 类名调整：
+
+```json
+{
+  "typography": {
+    "bio": {
+      "textColor": "text-blue-400"
+    },
+    "team": {
+      "background": "bg-blue-900/30"
+    }
+  }
+}
+```
+
+---
+
+## 部署
+
+### 自动部署 (推荐)
+
+项目已配置 GitHub Actions，提交代码后自动部署。
+
+### 手动部署
+
+```bash
+# 构建生产版本
+bun run build
+
+# 部署到 gh-pages 分支
+bunx gh-pages -d dist
+```
+
+### 自定义域名
+
+1. 在 `public/` 目录添加 `CNAME` 文件：
+
+   ```
+   your-domain.com
+   ```
+
+2. 在 GitHub 仓库 **Settings → Pages** 中配置自定义域名
+
+---
+
+## 项目结构
+
+```
+deepwn.github.io/
+├── public/
+│   ├── config.json          # 主配置文件
+│   ├── config.example.json   # 配置示例
+│   ├── config.example.md    # 配置文档
+│   ├── CNAME                # 自定义域名（可选）
+│   └── favicon.svg          # 网站图标
+├── src/
+│   ├── components/
+│   │   ├── AvatarWithGlow.tsx   # 头像组件
+│   │   ├── CustomLinks.tsx      # 自定义链接
+│   │   ├── Footer.tsx           # 页脚
+│   │   ├── HeroSection.tsx      # 主要区域
+│   │   ├── NameSection.tsx      # 名称展示
+│   │   ├── ProjectsSection.tsx  # 项目展示
+│   │   ├── TeamSection.tsx      # 团队标签
+│   │   └── ui/                  # 基础 UI 组件
+│   ├── services/
+│   │   ├── config.ts       # 配置类型定义
+│   │   └── github.ts       # GitHub API 服务
+│   ├── lib/
+│   │   └── utils.ts        # 工具函数
+│   ├── App.tsx             # 主应用组件
+│   ├── main.tsx            # 入口文件
+│   └── index.css           # 全局样式
+├── index.html              # HTML 模板
+├── package.json            # 项目依赖
+├── tailwind.config.js      # Tailwind 配置
+├── vite.config.ts          # Vite 配置
+└── tsconfig.json           # TypeScript 配置
+```
+
+---
+
+## 技术栈
+
+| 类别     | 技术                       |
+| -------- | -------------------------- |
+| 框架     | React 19 + TypeScript      |
+| 构建工具 | Vite 7                     |
+| 样式     | Tailwind CSS 3             |
+| 动画     | Framer Motion              |
+| 图标     | Lucide React + React Icons |
+| 包管理器 | Bun                        |
+| 测试     | Vitest                     |
+| 代码规范 | ESLint + Prettier          |
+
+---
+
+## 贡献
+
+欢迎贡献代码、主题、建议！或对分支美化自行二开后发布。
+
+### 开发流程
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交改动 (`git commit -m 'Add amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 创建 Pull Request
+
+---
+
+## 致谢
+
+- [GitHub Pages](https://pages.github.com/) - 托管服务
+- [Tailwind CSS](https://tailwindcss.com/) - CSS 框架
+- [Vite](https://vitejs.dev/) - 构建工具
+- [React](https://reactjs.org/) - 前端框架
+- [Shadcn UI](https://shadcn.com/) - UI 组件
+
+---
+
+## 许可证
+
+本项目采用 MIT 许可证，详见 [LICENSE](./LICENSE) 文件。
+
+---
+
+**Made with ⚡ by [deepwn](https://github.com/deepwn)**

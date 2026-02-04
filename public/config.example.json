@@ -1,9 +1,9 @@
 {
-  "baseAccount": "deepwn",
-  "type": "org",
+  "baseAccount": "your-github-username",
+  "type": "user",
   "website": {
-    "title": "deePwn = Developer + Researcher",
-    "favicon": "/deepwn.png"
+    "title": "Your Name - Developer",
+    "favicon": "/favicon.svg"
   },
   "typography": {
     "name": {
@@ -31,8 +31,8 @@
     "logo": {
       "enabled": true,
       "shape": "none",
-      "src": "/deepwn1-01.png",
-      "scale": 2,
+      "src": "/your-logo.png",
+      "scale": 1,
       "onlineIndicator": {
         "enabled": false,
         "color": "green"
@@ -45,7 +45,7 @@
       "fontSizeMd": "md:text-base",
       "fontWeight": "font-medium",
       "textColor": "text-gray-200",
-      "background": "bg-black/10",
+      "background": "bg-black/30",
       "borderColor": "border-white/10",
       "indicator": {
         "enabled": true,
@@ -55,15 +55,21 @@
     }
   },
   "repoFilter": {
-    "hidden_repos": ["deepwn.github.io"]
+    "hidden_repos": []
   },
   "customLinks": {
     "enabled": true,
     "links": [
-      { "label": "GitHub", "url": "https://github.com/deepwn", "icon": "FaGithub" },
-      { "label": "Email", "url": "mailto:admin@deepwn.com", "icon": "FaEnvelope" },
-      { "label": "X (Twitter)", "url": "https://x.com/evil7x", "icon": "SiX" },
-      { "label": "Contact", "url": "https://github.com/orgs/deepwn/discussions", "icon": "FaComments" }
+      {
+        "label": "GitHub",
+        "url": "https://github.com/your-username",
+        "icon": "FaGithub"
+      },
+      {
+        "label": "Email",
+        "url": "mailto:your@email.com",
+        "icon": "FaEnvelope"
+      }
     ]
   }
 }

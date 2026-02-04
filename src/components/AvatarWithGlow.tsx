@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { GithubProfile } from "@/services/github";
 import type { LogoConfig } from "@/services/config";
 
@@ -52,11 +51,24 @@ export function AvatarWithGlow({ profile, logoConfig }: AvatarWithGlowProps) {
   // Helper to get ring class (inner shadow ring)
   const getRingClass = () => {
     const config = logoConfig;
-    // Always show ring unless border is explicitly false
-    if (!config || config.border !== false) {
-      return "ring-4 ring-black/50";
+    // No ring when shape is 'none' or border is explicitly false
+    if (config?.shape === "none" || config?.border === false) {
+      return "";
     }
-    return "";
+    return "ring-4 ring-black/50";
+  };
+
+  // Helper to get shape class to override Avatar's default rounded-full
+  const getShapeClass = () => {
+    const config = logoConfig;
+    if (!config || config.shape === "circle" || !config.shape) {
+      return "rounded-full";
+    }
+    if (config.shape === "square") {
+      return "rounded-lg";
+    }
+    // shape === "none" - no border radius
+    return "rounded-none";
   };
 
   // Helper to get glow blur class based on shape
@@ -74,14 +86,21 @@ export function AvatarWithGlow({ profile, logoConfig }: AvatarWithGlowProps) {
   const avatarFallback = logoConfig?.src ? "LOGO" : profile?.login?.slice(0, 2).toUpperCase();
 
   const avatarContent = (
-    <Avatar
-      className={`${getLogoSizeClasses()} ${getBorderClass()} ${getRingClass()} shadow-2xl group-hover:scale-105 transition-transform duration-500 ease-out`}
+    <div
+      className={`${getLogoSizeClasses()} ${getBorderClass()} ${getRingClass()} ${getShapeClass()} shadow-2xl group-hover:scale-105 transition-transform duration-500 ease-out overflow-hidden relative`}
     >
-      <AvatarImage src={avatarSrc} alt={avatarAlt} className="object-cover" />
-      <AvatarFallback className="text-2xl bg-gradient-to-br from-green-600 to-blue-600">
-        {avatarFallback}
-      </AvatarFallback>
-    </Avatar>
+      {avatarSrc ? (
+        <img
+          src={avatarSrc}
+          alt={avatarAlt}
+          className="object-cover w-full h-full"
+        />
+      ) : (
+        <div className="w-full h-full bg-gradient-to-br from-green-600 to-blue-600 flex items-center justify-center text-2xl font-bold">
+          {avatarFallback}
+        </div>
+      )}
+    </div>
   );
 
   return (
