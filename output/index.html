@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="dynamic-favicon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="dynamic-title">deepwn.github.io</title>
+    <script>
+      // Get favicon MIME type based on file extension
+      function getFaviconMimeType(url) {
+        const extension = url.split('.').pop()?.toLowerCase();
+        const mimeTypes = {
+          'svg': 'image/svg+xml',
+          'png': 'image/png',
+          'ico': 'image/x-icon',
+          'jpg': 'image/jpeg',
+          'jpeg': 'image/jpeg',
+          'gif': 'image/gif',
+          'webp': 'image/webp'
+        };
+        return mimeTypes[extension] || 'image/x-icon';
+      }
+
+      // Fetch config and update page title and favicon
+      fetch('/config.json')
+        .then(r => r.json())
+        .then(config => {
+          if (config.website) {
+            if (config.website.title) {
+              document.title = config.website.title;
+            }
+            if (config.website.favicon) {
+              const faviconLink = document.getElementById('dynamic-favicon');
+              if (faviconLink) {
+                faviconLink.setAttribute('href', config.website.favicon);
+                faviconLink.setAttribute('type', getFaviconMimeType(config.website.favicon));
+              }
+            }
+          }
+        })
+        .catch(() => {
+          // Silently fail - keep default values
+        });
+    </script>
+    <script type="module" crossorigin src="/assets/index-C-JMuLBC.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Ccgxc5tl.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

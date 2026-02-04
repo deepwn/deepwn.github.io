@@ -1,0 +1,79 @@
+{
+  "baseAccount": "your-github-username",
+  "type": "user",
+  "website": {
+    "title": "Your Name - Developer",
+    "favicon": "/favicon.svg"
+  },
+  "typography": {
+    "name": {
+      "enabled": false,
+      "fontSize": "text-5xl",
+      "fontSizeMd": "md:text-7xl",
+      "fontSizeLg": "lg:text-8xl",
+      "fontWeight": "font-bold"
+    },
+    "bio": {
+      "enabled": true,
+      "fontSize": "text-lg",
+      "fontSizeMd": "md:text-xl",
+      "fontWeight": "font-medium",
+      "textColor": "text-gray-300",
+      "glow": {
+        "enabled": true,
+        "intensity": "low"
+      },
+      "animation": {
+        "enabled": true,
+        "type": "text-glow"
+      }
+    },
+    "logo": {
+      "enabled": true,
+      "shape": "none",
+      "src": "/your-logo.png",
+      "scale": 1,
+      "onlineIndicator": {
+        "enabled": false,
+        "color": "green"
+      }
+    },
+    "team": {
+      "enabled": true,
+      "label": "Open to Collaborations",
+      "fontSize": "text-sm",
+      "fontSizeMd": "md:text-base",
+      "fontWeight": "font-medium",
+      "textColor": "text-gray-200",
+      "background": "bg-black/30",
+      "borderColor": "border-white/10",
+      "indicator": {
+        "enabled": true,
+        "color": "green",
+        "animate": true
+      }
+    }
+  },
+  "repoFilter": {
+    "hidden_repos": []
+  },
+  "memberFilter": {
+    "append_users": [],
+    "owner": ""
+  },
+  "customLinks": {
+    "enabled": true,
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/your-username",
+        "icon": "FaGithub"
+      },
+      {
+        "label": "Email",
+        "url": "mailto:your@email.com",
+        "icon": "FaEnvelope"
+      }
+    ]
+  }
+}
