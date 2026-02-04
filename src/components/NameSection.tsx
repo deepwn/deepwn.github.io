@@ -23,6 +23,12 @@ const getGlowClass = (enabled: boolean, intensity: "low" | "medium" | "high" | u
   }
 };
 
+// Helper function to get text outline shadow for better readability
+const getTextOutlineClass = (): string => {
+  // Creates a subtle dark outline around text for better visibility on any background
+  return "drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]";
+};
+
 // Helper function to convert animation type to class
 const getAnimationClass = (enabled: boolean, type: string | undefined): string => {
   if (!enabled || !type) return "";
@@ -92,13 +98,13 @@ export function NameSection({ loading, profile, typography }: NameSectionProps) 
       {nameConfig.enabled !== false &&
         (nameConfig.gradient?.enabled ? (
           <h1
-            className={`${nameConfig.fontSize} ${nameConfig.fontSizeMd || ""} ${nameConfig.fontSizeLg || ""} ${nameConfig.fontWeight || "font-bold"} tracking-tight bg-gradient-to-r ${nameConfig.gradient.from} ${nameConfig.gradient.via} ${nameConfig.gradient.to} bg-clip-text text-transparent ${getGlowClass(nameConfig.glow?.enabled || false, nameConfig.glow?.intensity)} ${getAnimationClass(nameConfig.animation?.enabled || false, nameConfig.animation?.type)}`}
+            className={`${nameConfig.fontSize} ${nameConfig.fontSizeMd || ""} ${nameConfig.fontSizeLg || ""} ${nameConfig.fontWeight || "font-bold"} tracking-tight bg-gradient-to-r ${nameConfig.gradient.from} ${nameConfig.gradient.via} ${nameConfig.gradient.to} bg-clip-text text-transparent ${getTextOutlineClass()} ${getGlowClass(nameConfig.glow?.enabled || false, nameConfig.glow?.intensity)} ${getAnimationClass(nameConfig.animation?.enabled || false, nameConfig.animation?.type)}`}
           >
             {profile?.name || profile?.login}
           </h1>
         ) : (
           <h1
-            className={`${nameConfig.fontSize} ${nameConfig.fontSizeMd || ""} ${nameConfig.fontSizeLg || ""} ${nameConfig.fontWeight || "font-bold"} tracking-tight ${nameConfig.color} ${getGlowClass(nameConfig.glow?.enabled || false, nameConfig.glow?.intensity)} ${getAnimationClass(nameConfig.animation?.enabled || false, nameConfig.animation?.type)}`}
+            className={`${nameConfig.fontSize} ${nameConfig.fontSizeMd || ""} ${nameConfig.fontSizeLg || ""} ${nameConfig.fontWeight || "font-bold"} tracking-tight ${nameConfig.color} ${getTextOutlineClass()} ${getGlowClass(nameConfig.glow?.enabled || false, nameConfig.glow?.intensity)} ${getAnimationClass(nameConfig.animation?.enabled || false, nameConfig.animation?.type)}`}
           >
             {profile?.name || profile?.login}
           </h1>
@@ -108,13 +114,13 @@ export function NameSection({ loading, profile, typography }: NameSectionProps) 
       {bioConfig.enabled !== false &&
         (bioConfig.gradient?.enabled ? (
           <p
-            className={`${bioConfig.fontSize} ${bioConfig.fontSizeMd || ""} ${bioConfig.fontWeight || "font-semibold"} max-w-2xl mx-auto leading-relaxed bg-gradient-to-r ${bioConfig.gradient.from} ${bioConfig.gradient.via || ""} ${bioConfig.gradient.to} bg-clip-text text-transparent ${getGlowClass(bioConfig.glow?.enabled || false, bioConfig.glow?.intensity)} ${getAnimationClass(bioConfig.animation?.enabled || false, bioConfig.animation?.type)}`}
+            className={`${bioConfig.fontSize} ${bioConfig.fontSizeMd || ""} ${bioConfig.fontWeight || "font-semibold"} max-w-2xl mx-auto leading-relaxed bg-gradient-to-r ${bioConfig.gradient.from} ${bioConfig.gradient.via || ""} ${bioConfig.gradient.to} bg-clip-text text-transparent ${getTextOutlineClass()} ${getGlowClass(bioConfig.glow?.enabled || false, bioConfig.glow?.intensity)} ${getAnimationClass(bioConfig.animation?.enabled || false, bioConfig.animation?.type)}`}
           >
             {profile?.bio || "Developer & Creator"}
           </p>
         ) : (
           <p
-            className={`${bioConfig.fontSize} ${bioConfig.fontSizeMd || ""} ${bioConfig.color} ${bioConfig.fontWeight || "font-semibold"} max-w-2xl mx-auto leading-relaxed ${getGlowClass(bioConfig.glow?.enabled || false, bioConfig.glow?.intensity)} ${getAnimationClass(bioConfig.animation?.enabled || false, bioConfig.animation?.type)}`}
+            className={`${bioConfig.fontSize} ${bioConfig.fontSizeMd || ""} ${bioConfig.color} ${bioConfig.fontWeight || "font-semibold"} max-w-2xl mx-auto leading-relaxed ${getTextOutlineClass()} ${getGlowClass(bioConfig.glow?.enabled || false, bioConfig.glow?.intensity)} ${getAnimationClass(bioConfig.animation?.enabled || false, bioConfig.animation?.type)}`}
           >
             {profile?.bio || "Developer & Creator"}
           </p>
