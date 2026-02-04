@@ -109,11 +109,9 @@ function App2() {
       <div className="relative z-10">
         <HeroSection
           profile={profile}
-          repos={repos}
           typography={typography}
           logoConfig={logoConfig}
           customLinks={customLinks}
-          members={members}
           onScrollToProjects={scrollToProjects}
         />
 

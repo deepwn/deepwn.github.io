@@ -4,6 +4,14 @@
  * and are used throughout the application for customization.
  */
 
+// Website configuration (title, favicon, etc.)
+export interface WebsiteConfig {
+  /** Page title displayed in browser tab */
+  title?: string;
+  /** Favicon URL - relative path or full URL */
+  favicon?: string;
+}
+
 // Typography configuration for name display
 export interface TypographyConfig {
   enabled: boolean;
@@ -132,6 +140,8 @@ export interface CustomLinksConfig {
 export interface AppConfig {
   baseAccount: string;
   type?: 'user' | 'org';
+  /** Website configuration (title, favicon, etc.) */
+  website?: WebsiteConfig;
   /** Repository filtering configuration */
   repoFilter?: RepoFilterConfig;
   /** Custom links configuration */

@@ -1,22 +1,19 @@
-import type { GithubProfile, GithubRepo, GithubMember } from "@/services/github";
+import type { GithubProfile } from "@/services/github";
 import type { LogoConfig, TypographySettings, CustomLinksConfig } from "@/services/config";
 import { AvatarWithGlow } from "./AvatarWithGlow";
 import { NameSection } from "./NameSection";
-import { StatsCards } from "./StatsCards";
 import { InfoPills } from "./InfoPills";
 import { ScrollIndicator } from "./ScrollIndicator";
 
 interface HeroSectionProps {
   profile: GithubProfile | null;
-  repos?: GithubRepo[];
   typography: TypographySettings | null;
   logoConfig: LogoConfig | null;
   customLinks?: CustomLinksConfig;
-  members?: GithubMember[];
   onScrollToProjects: () => void;
 }
 
-export function HeroSection({ profile, repos, typography, logoConfig, customLinks, members, onScrollToProjects }: HeroSectionProps) {
+export function HeroSection({ profile, typography, logoConfig, customLinks, onScrollToProjects }: HeroSectionProps) {
   return (
     <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
       {/* Animated Background Overlay - Enhanced for readability */}
@@ -33,14 +30,6 @@ export function HeroSection({ profile, repos, typography, logoConfig, customLink
         <NameSection
           profile={profile}
           typography={typography}
-          loading={false}
-        />
-
-        {/* Stats Cards */}
-        <StatsCards
-          profile={profile}
-          reposCount={repos?.length || 0}
-          membersCount={members?.length || 0}
           loading={false}
         />
 

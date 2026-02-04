@@ -67,3 +67,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom animations for project cards */
+@keyframes sweep-left-to-right {
+  0% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.animate-sweep {
+  animation: sweep-left-to-right 1.5s ease-in-out;
+}
