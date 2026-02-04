@@ -1,0 +1,90 @@
+{
+  "baseAccount": "deepwn",
+  "typography": {
+    "name": {
+      "enabled": false,
+      "fontSize": "text-5xl",
+      "fontSizeMd": "md:text-7xl",
+      "fontSizeLg": "lg:text-8xl",
+      "fontWeight": "font-bold",
+      "tracking": "tracking-tight",
+      "spacing": 8,
+      "color": "text-white",
+      "gradient": {
+        "enabled": false,
+        "from": "from-green-400",
+        "via": "via-blue-500",
+        "to": "to-purple-500"
+      },
+      "glow": {
+        "enabled": false,
+        "intensity": "medium"
+      },
+      "animation": {
+        "enabled": false,
+        "type": "text-glow"
+      }
+    },
+    "bio": {
+      "enabled": true,
+      "fontSize": "text-lg",
+      "fontSizeMd": "md:text-xl",
+      "color": "text-gray-300",
+      "fontWeight": "font-medium",
+      "gradient": {
+        "enabled": false,
+        "from": "from-green-400",
+        "to": "to-blue-400"
+      },
+      "glow": {
+        "enabled": false,
+        "intensity": "low"
+      },
+      "animation": {
+        "enabled": false,
+        "type": "text-glow"
+      }
+    },
+    "logo": {
+      "enabled": true,
+      "shape": "none",
+      "border": false,
+      "borderColor": "white/10",
+      "borderWidth": "4",
+      "src": "/deepwn1-01.png",
+      "scale": 2,
+      "onlineIndicator": {
+        "enabled": false,
+        "color": "green"
+      }
+    },
+    "team": {
+      "enabled": true,
+      "label": "Open to Collaborations",
+      "fontSize": "base",
+      "fontSizeMd": "lg",
+      "fontWeight": "medium",
+      "textColor": "white",
+      "background": "black/50",
+      "borderColor": "white/20",
+      "indicator": {
+        "enabled": true,
+        "color": "green",
+        "animate": true
+      }
+    }
+  },
+  "repoFilter": {
+    "hidden_repos": ["deepwn.github.io"],
+    "listing_repos": []
+  },
+  "customLinks": {
+    "enabled": true,
+    "links": [
+      { "label": "GitHub", "url": "https://github.com/deepwn", "icon": "Github" },
+      { "label": "Email", "url": "mailto:admin@deepwn.com", "icon": "Mail" },
+      { "label": "Twitter", "url": "https://twitter.com/evil7x", "icon": "Twitter" },
+      { "label": "Discussions", "url": "https://github.com/orgs/deepwn/discussions", "icon": "Chat" }
+    ]
+  }
+}
