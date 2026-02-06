@@ -89,6 +89,8 @@ export interface BaseSectionConfig {
   logoScale?: number;
   /** Disable logo display */
   disableLogo?: boolean;
+  /** Logo shape: 'circle' (rounded), 'square' (sharp corners), 'none' (original) */
+  logoShape?: 'circle' | 'square' | 'none';
   /** Name font family class (e.g., 'font-sans', 'font-mono', 'font-serif') */
   nameFontFamily?: string;
   /** Name font size preset (sm, base, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl) */

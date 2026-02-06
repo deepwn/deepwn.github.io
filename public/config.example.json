@@ -26,6 +26,7 @@
       "scrollTipLabel": "More Info",
       "logoSrc": "",
       "logoScale": 1,
+      "logoShape": "circle",
       "disableLogo": false,
       "nameFontFamily": "font-sans",
       "nameSize": "4xl",

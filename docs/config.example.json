@@ -8,7 +8,8 @@
   "profile": {
     "displayName": "Your Name",
     "bio": "Full-stack developer",
-    "avatar": "/avatar.png"
+    "avatar": "/avatar.png",
+    "avatarShape": "circle"
   },
   "appearance": {
     "theme": "default",

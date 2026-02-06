@@ -14,6 +14,8 @@ interface DecryptingAvatarProps {
   src?: string;
   /** Whether to use image mask for transparent pixel detection (default: true) */
   mask?: boolean;
+  /** Logo shape: 'circle' (rounded-full), 'square' (rounded-none), 'none' (original) */
+  shape?: 'circle' | 'square' | 'none';
   /** Children element to display when decryption is complete */
   children?: React.ReactNode;
   /** Custom CSS class */
@@ -38,13 +40,54 @@ export function DecryptingAvatar({
   gridSize = 8,
   src,
   mask = true,
+  shape = 'circle',
   children,
   className = "",
 }: DecryptingAvatarProps) {
-  const [blocks, setBlocks] = useState<BlockState[]>([]);
+  // Determine border-radius class based on shape prop (default to circle if undefined)
+  const shapeClass = {
+    circle: 'rounded-full',
+    square: 'rounded-none',
+    none: '',
+  }[(shape as string) || 'circle'] || 'rounded-full';
+  // Initialize blocks with all blocks in "not revealed" state immediately
+  // This ensures the encrypted/glitched state is visible from page load
+  const [blocks, setBlocks] = useState<BlockState[]>(() => {
+    const initialBlocks: BlockState[] = [];
+    const GLITCH_CHARS = "█▓▒░▀▄▌▐■□●○▫▲△▼▽◆◇◎◈★☆";
+
+    for (let i = 0; i < gridSize * gridSize; i++) {
+      const row = Math.floor(i / gridSize);
+      const col = i % gridSize;
+      const randomOffset = Math.random() * 0.7;
+      const spatialOffset = (row + col) / (gridSize * 2) * 0.3;
+
+      initialBlocks.push({
+        id: i,
+        isRevealed: false,
+        offsetX: (Math.random() - 0.5) * 10,
+        offsetY: (Math.random() - 0.5) * 10,
+        charIndex: Math.floor(Math.random() * GLITCH_CHARS.length),
+        colorInvert: Math.random() > 0.5,
+        revealOrder: Math.floor((randomOffset + spatialOffset) * speed),
+        hasContent: true, // Initially assume all blocks have content
+      });
+    }
+    return initialBlocks;
+  });
+  // Delay decryption animation to ensure encrypted state is visible first
+  const [isDecrypting, setIsDecrypting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
+
+  // Start decryption animation after a brief delay to show encrypted state first
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsDecrypting(true);
+    }, 100); // Brief delay to ensure encrypted state is visible
+    return () => clearTimeout(timer);
+  }, []);
 
   // ASCII characters for glitch effect
   const GLITCH_CHARS = "█▓▒░▀▄▌▐■□●○▫▲△▼▽◆◇◎◈★☆";
@@ -190,7 +233,7 @@ export function DecryptingAvatar({
 
   return (
     <div
-      className={`relative ${className}`}
+      className={`relative ${className} ${shapeClass}`}
       style={{ width: size, height: size }}
       role="img"
       aria-label={alt}
@@ -198,14 +241,14 @@ export function DecryptingAvatar({
       {/* Hidden canvas for mask analysis */}
       <canvas ref={canvasRef} className="hidden" />
 
-      {/* Base layer - original content (z-0) - always visible */}
-      <div className="absolute inset-0 z-0">
+      {/* Base layer - original content (z-0) - only visible during decryption or after completion */}
+      <div className={`absolute inset-0 z-0 overflow-hidden ${shapeClass} ${isDecrypting || isComplete ? "" : "hidden"}`}>
         {children}
       </div>
 
       {/* Decryption effect overlay (z-10) */}
       <div
-        className="absolute inset-0 z-10 grid"
+        className={`absolute inset-0 z-10 grid ${shapeClass}`}
         style={{
           gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
           gridTemplateRows: `repeat(${gridSize}, 1fr)`,
@@ -245,7 +288,7 @@ export function DecryptingAvatar({
 
       {/* Complete overlay (z-20) - shows full original content after animation */}
       {isComplete && (
-        <div className="absolute inset-0 z-20">
+        <div className={`absolute inset-0 z-20 overflow-hidden ${shapeClass}`}>
           {children}
         </div>
       )}

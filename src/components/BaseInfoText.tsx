@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { GithubProfile } from '@/services/github';
 import { DecryptingText } from './DecryptingText';
@@ -59,14 +58,8 @@ export function BaseInfoText({
   descriptionText,
   disableDescription = false,
 }: BaseInfoTextProps) {
-  const [startDecrypt, setStartDecrypt] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setStartDecrypt(true);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  // DecryptingText component handles encrypted state initialization internally
+  // No need for separate startDecrypt state - it shows random chars first, then reveals
 
   if (loading) {
     return (
@@ -95,22 +88,14 @@ export function BaseInfoText({
         </h1>
       )}
       
-      {/* Bio with gradient */}
+      {/* Bio with gradient - always show DecryptingText (shows encrypted state first, then reveals) */}
       {!disableDescription && (
         <div className={`${descriptionFontFamily || ''}`}>
-          {startDecrypt ? (
-            <DecryptingText
-              targetText={description}
-              speed={30}
-              className={`font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${descriptionSizeClasses[descriptionSize] || descriptionSizeClasses.lg} text-gray-300`}
-            />
-          ) : (
-            <p
-              className={`font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${descriptionSizeClasses[descriptionSize] || descriptionSizeClasses.lg} text-gray-300`}
-            >
-              {description}
-            </p>
-          )}
+          <DecryptingText
+            targetText={description}
+            speed={30}
+            className={`font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${descriptionSizeClasses[descriptionSize] || descriptionSizeClasses.lg} text-gray-300`}
+          />
         </div>
       )}
     </div>

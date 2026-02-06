@@ -11,6 +11,7 @@
     "base": {
       "logoScale": 2,
       "logoSrc": "/deepwn1-01.png",
+      "logoShape": "none",
       "disableLogo": false,
       "disableName": true,
       "disableDescription": false,

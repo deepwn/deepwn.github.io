@@ -23,6 +23,7 @@ export function BaseSection({
   const {
     logoSrc,
     logoScale = 1,
+    logoShape,
     disableLogo = false,
     nameFontFamily,
     nameSize,
@@ -51,7 +52,7 @@ export function BaseSection({
 
       <div className="relative z-20 w-full max-w-6xl mx-auto text-center space-y-6 animate-fade-in-up">
         {/* Avatar with Glow Effect */}
-        {showLogo && <BaseLogo profile={profile} customLogoSrc={logoSrc} logoScale={logoScale} />}
+        {showLogo && <BaseLogo profile={profile} customLogoSrc={logoSrc} logoScale={logoScale} logoShape={logoShape} />}
 
         {/* Name & Bio */}
         <BaseInfoText
