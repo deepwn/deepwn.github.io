@@ -24,7 +24,6 @@ function App2() {
   const [config, setConfig] = useState<AppConfig | null>(null);
   const [members, setMembers] = useState<GithubMember[]>([]);
   const [owner, setOwner] = useState<string | undefined>(undefined);
-  const [hiddenUsers, setHiddenUsers] = useState<number>(0);
   const projectsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,13 +66,7 @@ function App2() {
             const membersConfig = cfg.sections?.members;
 
             const append_users = membersConfig?.appendUsers || [];
-            const hidden_users = membersConfig?.hiddenUsers;
             const ownerUsername = membersConfig?.owner;
-
-            // Set hidden users count for display
-            if (hidden_users !== undefined) {
-              setHiddenUsers(hidden_users);
-            }
 
             // Set owner for display in MembersSection
             if (ownerUsername) {
@@ -214,8 +207,8 @@ function App2() {
         {showMembers && (
           <MembersSection
             members={members}
+            profile={profile}
             owner={owner}
-            hiddenUsers={hiddenUsers}
             config={sectionsConfig?.members}
           />
         )}

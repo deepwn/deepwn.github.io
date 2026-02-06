@@ -15,7 +15,7 @@
       "disableLogo": false,
       "disableName": true,
       "disableDescription": false,
-      "scrollTipLabel": "Scroll Down"
+      "scrollTipLabel": "Scroll More"
     },
     "projects": {
       "title": {
@@ -29,8 +29,8 @@
         "title": "Group Members",
         "description": "A young, active and innovative team"
       },
+      "memberCount": 11,
       "countLabel": "members",
-      "hiddenUsers": 8,
       "owner": "evil7",
       "appendUsers": ["sususu416"],
       "separatorColor": "border-white/10"

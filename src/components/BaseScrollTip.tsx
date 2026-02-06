@@ -8,7 +8,7 @@ interface BaseScrollTipProps {
 }
 
 export function BaseScrollTip({
-  label = 'More Info',
+  label = 'More',
   onClick,
   scrollThreshold = 100,
 }: BaseScrollTipProps) {
@@ -66,7 +66,7 @@ export function BaseScrollTip({
       aria-label={label}
     >
       {/* Label */}
-      <span className="tracking-widest uppercase">{label}</span>
+      <span className="tracking-widest">{label}</span>
 
       {/* Arrow */}
       <ChevronDown size={20} className="animate-bounce-slow" />
