@@ -25,15 +25,18 @@
       fetch('/config.json')
         .then(r => r.json())
         .then(config => {
-          if (config.website) {
-            if (config.website.title) {
-              document.title = config.website.title;
+          // Support both flat structure (config.website) and nested structure (config.site.website)
+          const websiteConfig = config.website || config.site?.website;
+
+          if (websiteConfig) {
+            if (websiteConfig.title) {
+              document.title = websiteConfig.title;
             }
-            if (config.website.favicon) {
+            if (websiteConfig.favicon) {
               const faviconLink = document.getElementById('dynamic-favicon');
               if (faviconLink) {
-                faviconLink.setAttribute('href', config.website.favicon);
-                faviconLink.setAttribute('type', getFaviconMimeType(config.website.favicon));
+                faviconLink.setAttribute('href', websiteConfig.favicon);
+                faviconLink.setAttribute('type', getFaviconMimeType(websiteConfig.favicon));
               }
             }
           }
@@ -42,8 +45,8 @@
           // Silently fail - keep default values
         });
     </script>
-    <script type="module" crossorigin src="/assets/index-BVKp8f_p.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BexJPr8d.css">
+    <script type="module" crossorigin src="/assets/index-R-cV22p7.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BuXFq1LN.css">
   <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
   <body>
     <div id="root"></div>
