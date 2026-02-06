@@ -121,32 +121,6 @@ export default defineConfig({
             },
           },
         ],
-
-        // Precache manifest (optional but useful)
-        manifestTransforms: [
-          async (manifest) => {
-            // Add cache busting with build timestamp
-            const timestamp = Date.now();
-            const warnings: string[] = [];
-            const transformedManifest = manifest.map((entry) => {
-              if (entry.url.startsWith('/assets/')) {
-                return {
-                  ...entry,
-                  url: `${entry.url}?v=${timestamp}`,
-                };
-              }
-              return entry;
-            });
-            return { manifest: transformedManifest, warnings };
-          },
-        ],
-
-        // Dev mode settings (optional, for debugging)
-        // @ts-expect-error devOptions is valid for InjectManifest but not fully typed in GenerateSW
-        devOptions: {
-          enabled: true,
-          type: 'module',
-        },
       },
     }),
   ],
