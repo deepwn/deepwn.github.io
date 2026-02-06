@@ -54,20 +54,18 @@ export function BaseSection({
         {showLogo && <BaseLogo profile={profile} customLogoSrc={logoSrc} logoScale={logoScale} />}
 
         {/* Name & Bio */}
-        {(showName || showDescription) && (
-          <BaseInfoText
-            profile={profile}
-            loading={false}
-            nameFontFamily={nameFontFamily}
-            nameSize={nameSize}
-            nameText={nameText}
-            disableName={!showName}
-            descriptionFontFamily={descriptionFontFamily}
-            descriptionSize={descriptionSize}
-            descriptionText={descriptionText}
-            disableDescription={!showDescription}
-          />
-        )}
+        <BaseInfoText
+          profile={profile}
+          loading={false}
+          nameFontFamily={nameFontFamily}
+          nameSize={nameSize}
+          nameText={nameText}
+          disableName={!showName}
+          descriptionFontFamily={descriptionFontFamily}
+          descriptionSize={descriptionSize}
+          descriptionText={descriptionText}
+          disableDescription={!showDescription}
+        />
 
         {/* Profile Links */}
         <div className="flex flex-wrap justify-center gap-3 mt-6">

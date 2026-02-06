@@ -148,24 +148,6 @@ export interface FooterSectionConfig {
   hideBuiltWith?: boolean;
 }
 
-export interface CustomLink {
-  /** Link label */
-  label: string;
-  /** Link URL */
-  url: string;
-  /** Icon name (react-icons component name) */
-  icon?: string;
-}
-
-export interface CustomLinksSectionConfig {
-  /** Enable/disable the custom links section */
-  enabled?: boolean;
-  /** Section title and description */
-  title?: SectionTitleConfig;
-  /** Custom links array */
-  links?: CustomLink[];
-}
-
 // ============================================================================
 // 5. Main App Configuration
 // ============================================================================
@@ -185,8 +167,6 @@ export interface AppConfig {
     projects?: ProjectsSectionConfig;
     /** Footer section configuration */
     footer?: FooterSectionConfig;
-    /** Custom links section configuration */
-    customLinks?: CustomLinksSectionConfig;
   };
   /** Legacy configuration format for backward compatibility */
   [key: string]: unknown;
@@ -250,10 +230,6 @@ export const defaultConfig: Required<AppConfig> = {
       enabled: true,
       customText: '',
       hideBuiltWith: false,
-    },
-    customLinks: {
-      enabled: false,
-      links: [],
     },
   },
 };

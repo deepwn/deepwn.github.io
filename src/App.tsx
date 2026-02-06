@@ -150,12 +150,22 @@ function App2() {
   // Get section configs
   const sectionsConfig = config?.sections;
 
+  const showBase = sectionsConfig?.base?.enabled ?? true;
+  const showProjects = sectionsConfig?.projects?.enabled ?? true;
+  const showMembers = sectionsConfig?.members?.enabled ?? true;
+  const showFooter = sectionsConfig?.footer?.enabled ?? true;
+
+  // Get theme overrides
+  const themeConfig = config?.theme;
+  const customColors = themeConfig?.colors;
+  const customBackground = themeConfig?.background;
+
   return (
-    <div className="relative w-full min-h-screen bg-black overflow-x-hidden font-sans text-white selection:bg-green-500/30">
+    <div className="relative w-full min-h-screen overflow-x-hidden font-sans text-white selection:bg-green-500/30" style={customBackground?.main ? { background: customBackground.main } : undefined}>
       {/* Background Animation - Fixed at bottom layer */}
       <div className="fixed inset-0 z-0">
         <GlitchScreen
-          glitchColors={['#2b4539', '#61dca3', '#61b3dc']}
+          glitchColors={customColors?.accent ? ['#2b4539', customColors.accent, '#61b3dc'] : ['#2b4539', '#61dca3', '#61b3dc']}
           glitchSpeed={60}
           smooth={true}
           outerVignette={true}
@@ -164,34 +174,47 @@ function App2() {
         />
       </div>
 
+      {/* Custom background gradient override */}
+      {customBackground?.gradient && (
+        <div className="fixed inset-0 z-0 pointer-events-none" style={{ background: customBackground.gradient }} />
+      )}
+
       {/* Main Content - Above background */}
       <div className="relative z-10">
-        <BaseSection
-          profile={profile}
-          onScrollToProjects={scrollToProjects}
-          scrollTipLabel={sectionsConfig?.base?.scrollTipLabel}
-          config={sectionsConfig?.base}
-        />
+        {showBase && (
+          <BaseSection
+            profile={profile}
+            onScrollToProjects={scrollToProjects}
+            scrollTipLabel={sectionsConfig?.base?.scrollTipLabel}
+            config={sectionsConfig?.base}
+          />
+        )}
 
-        <ProjectsSection 
-          ref={projectsRef} 
-          repos={repos} 
-          profile={profile}
-          config={sectionsConfig?.projects}
-        />
+        {showProjects && (
+          <ProjectsSection
+            ref={projectsRef}
+            repos={repos}
+            profile={profile}
+            config={sectionsConfig?.projects}
+          />
+        )}
 
-        <MembersSection 
-          members={members} 
-          owner={owner} 
-          hiddenUsers={hiddenUsers}
-          config={sectionsConfig?.members}
-        />
+        {showMembers && (
+          <MembersSection
+            members={members}
+            owner={owner}
+            hiddenUsers={hiddenUsers}
+            config={sectionsConfig?.members}
+          />
+        )}
 
-        <Footer 
-          profile={profile} 
-          customText={sectionsConfig?.footer?.customText}
-          hideBuiltWith={sectionsConfig?.footer?.hideBuiltWith}
-        />
+        {showFooter && (
+          <Footer
+            profile={profile}
+            customText={sectionsConfig?.footer?.customText}
+            hideBuiltWith={sectionsConfig?.footer?.hideBuiltWith}
+          />
+        )}
       </div>
     </div>
   );

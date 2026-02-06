@@ -128,7 +128,7 @@ export function MemberHiddenCard({ size = 80 }: MemberHiddenCardProps) {
 
         {/* Role Label */}
         <p className="text-xs text-gray-600 group-hover:text-gray-500 transition-colors duration-200">
-          ???
+          Private
         </p>
       </div>
     </div>

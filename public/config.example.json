@@ -1,41 +1,69 @@
 {
-  "account": "your-github-username",
-  "type": "user",
-  "website": {
-    "title": "Your Name - Developer",
-    "favicon": "/favicon.svg"
+  "site": {
+    "baseAccount": "your-github-username",
+    "type": "user",
+    "website": {
+      "title": "Your Name - Developer",
+      "favicon": "/favicon.svg"
+    }
   },
-  "profile": {
-    "displayName": "Your Name",
-    "bio": "Full-stack developer",
-    "avatar": "/avatar.png"
+  "theme": {
+    "preset": "default",
+    "colors": {
+      "accent": "green",
+      "heading": "text-white",
+      "body": "text-gray-300",
+      "muted": "text-gray-500"
+    },
+    "background": {
+      "main": "#0d1117",
+      "gradient": "linear-gradient(to bottom, #0d1117 0%, #161b22 50%, #0d1117 100%)"
+    }
   },
-  "appearance": {
-    "theme": "default",
-    "accent": "green",
-    "gradientBg": true,
-    "glowEffects": true
-  },
-  "content": {
-    "hiddenRepos": [],
-    "showForks": false,
-    "minStars": 0
-  },
-  "team": {
-    "enabled": true,
-    "label": "Open to Collaborations",
-    "showIndicator": true
-  },
-  "links": {
-    "enabled": true,
-    "links": [
-      { "label": "GitHub", "url": "https://github.com/your-username", "icon": "github" },
-      { "label": "Email", "url": "mailto:your@email.com", "icon": "mail" }
-    ]
-  },
-  "members": {
-    "extraMembers": [],
-    "hiddenCount": 0,
-    "owner": ""
+  "sections": {
+    "base": {
+      "enabled": true,
+      "scrollTipLabel": "More Info",
+      "logoSrc": "",
+      "logoScale": 1,
+      "disableLogo": false,
+      "nameFontFamily": "font-sans",
+      "nameSize": "4xl",
+      "nameText": "",
+      "disableName": false,
+      "descriptionFontFamily": "font-sans",
+      "descriptionSize": "lg",
+      "descriptionText": "",
+      "disableDescription": false
+    },
+    "members": {
+      "enabled": true,
+      "title": {
+        "title": "Group Members",
+        "description": "A young, active and innovative team",
+        "accentColor": "from-green-400 to-blue-500"
+      },
+      "countLabel": "members",
+      "hiddenUsers": 0,
+      "owner": "",
+      "appendUsers": [],
+      "separatorColor": "bg-gray-700"
+    },
+    "projects": {
+      "enabled": true,
+      "title": {
+        "title": "Featured Projects",
+        "description": "A collection of open source work and experiments",
+        "accentColor": "from-blue-400 to-purple-500"
+      },
+      "emptyText": "No projects found",
+      "hideViewAll": false,
+      "hiddenRepos": []
+    },
+    "footer": {
+      "enabled": true,
+      "customText": "",
+      "hideBuiltWith": false
+    }
   }
 }

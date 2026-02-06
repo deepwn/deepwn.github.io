@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { GithubProfile } from '@/services/github';
+import { DecryptingText } from './DecryptingText';
 
 interface BaseInfoTextProps {
   loading: boolean;
@@ -57,6 +59,15 @@ export function BaseInfoText({
   descriptionText,
   disableDescription = false,
 }: BaseInfoTextProps) {
+  const [startDecrypt, setStartDecrypt] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStartDecrypt(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   if (loading) {
     return (
       <div className="space-y-4 max-w-4xl mx-auto">
@@ -86,11 +97,21 @@ export function BaseInfoText({
       
       {/* Bio with gradient */}
       {!disableDescription && (
-        <p
-          className={`font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${descriptionFontFamily || ''} ${descriptionSizeClasses[descriptionSize] || descriptionSizeClasses.lg} text-gray-300`}
-        >
-          {description}
-        </p>
+        <div className={`${descriptionFontFamily || ''}`}>
+          {startDecrypt ? (
+            <DecryptingText
+              targetText={description}
+              speed={30}
+              className={`font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${descriptionSizeClasses[descriptionSize] || descriptionSizeClasses.lg} text-gray-300`}
+            />
+          ) : (
+            <p
+              className={`font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${descriptionSizeClasses[descriptionSize] || descriptionSizeClasses.lg} text-gray-300`}
+            >
+              {description}
+            </p>
+          )}
+        </div>
       )}
     </div>
   );
