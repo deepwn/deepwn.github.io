@@ -230,75 +230,75 @@ bun dev
 
 #### Site Configuration (站点配置)
 
-| 字段 | 说明 | 默认值 |
-|------|------|--------|
-| `site.baseAccount` | GitHub 用户名或组织名 | (必填) |
-| `site.type` | 账户类型：`"user"` 或 `"org"` | `"user"` |
-| `site.website.title` | 浏览器标签页标题 | `"GitHub Profile"` |
-| `site.website.favicon` | 网站图标路径（相对于 public 文件夹） | `"/favicon.svg"` |
+| 字段                   | 说明                                 | 默认值             |
+| ---------------------- | ------------------------------------ | ------------------ |
+| `site.baseAccount`     | GitHub 用户名或组织名                | (必填)             |
+| `site.type`            | 账户类型：`"user"` 或 `"org"`        | `"user"`           |
+| `site.website.title`   | 浏览器标签页标题                     | `"GitHub Profile"` |
+| `site.website.favicon` | 网站图标路径（相对于 public 文件夹） | `"/favicon.svg"`   |
 
 #### Theme Configuration (主题配置)
 
-| 字段 | 说明 | 默认值 |
-|------|------|--------|
-| `theme.preset` | 主题预设名称 | `"default"` |
-| `theme.colors.accent` | 强调色（主题预设决定实际颜色） | - |
-| `theme.colors.heading` | 标题文字颜色类名 | - |
-| `theme.colors.body` | 正文文字颜色类名 | - |
-| `theme.colors.muted` | 辅助文字颜色类名 | - |
-| `theme.background.main` | 主背景色 | `#0d1117` |
-| `theme.background.gradient` | 背景渐变样式 | - |
+| 字段                        | 说明                           | 默认值      |
+| --------------------------- | ------------------------------ | ----------- |
+| `theme.preset`              | 主题预设名称                   | `"default"` |
+| `theme.colors.accent`       | 强调色（主题预设决定实际颜色） | -           |
+| `theme.colors.heading`      | 标题文字颜色类名               | -           |
+| `theme.colors.body`         | 正文文字颜色类名               | -           |
+| `theme.colors.muted`        | 辅助文字颜色类名               | -           |
+| `theme.background.main`     | 主背景色                       | `#0d1117`   |
+| `theme.background.gradient` | 背景渐变样式                   | -           |
 
 #### Base Section Configuration (主区域配置)
 
-| 字段 | 说明 | 默认值 |
-|------|------|--------|
-| `sections.base.enabled` | 是否显示主区域 | `true` |
-| `sections.base.scrollTipLabel` | 滚动提示文字 | `"More Info"` |
-| `sections.base.logoSrc` | 自定义 Logo 图片 URL | - |
-| `sections.base.logoScale` | Logo 缩放比例 (0.5-2) | `1` |
-| `sections.base.disableLogo` | 是否禁用 Logo 显示 | `false` |
-| `sections.base.nameFontFamily` | 名称字体类名 | - |
-| `sections.base.nameSize` | 名称字体大小 (`sm`/`base`/`lg`/`xl`/`2xl`/`3xl`/`4xl`/`5xl`/`6xl`/`7xl`) | - |
-| `sections.base.nameText` | 自定义名称文本（覆盖 GitHub 显示名称） | - |
-| `sections.base.disableName` | 是否禁用名称显示 | `false` |
-| `sections.base.descriptionFontFamily` | 描述字体类名 | - |
-| `sections.base.descriptionSize` | 描述字体大小 (`sm`/`base`/`lg`/`xl`/`2xl`) | - |
-| `sections.base.descriptionText` | 自定义描述文本（覆盖 GitHub 简介） | - |
-| `sections.base.disableDescription` | 是否禁用描述显示 | `false` |
+| 字段                                  | 说明                                                                     | 默认值        |
+| ------------------------------------- | ------------------------------------------------------------------------ | ------------- |
+| `sections.base.enabled`               | 是否显示主区域                                                           | `true`        |
+| `sections.base.scrollTipLabel`        | 滚动提示文字                                                             | `"More Info"` |
+| `sections.base.logoSrc`               | 自定义 Logo 图片 URL                                                     | -             |
+| `sections.base.logoScale`             | Logo 缩放比例 (0.5-2)                                                    | `1`           |
+| `sections.base.disableLogo`           | 是否禁用 Logo 显示                                                       | `false`       |
+| `sections.base.nameFontFamily`        | 名称字体类名                                                             | -             |
+| `sections.base.nameSize`              | 名称字体大小 (`sm`/`base`/`lg`/`xl`/`2xl`/`3xl`/`4xl`/`5xl`/`6xl`/`7xl`) | -             |
+| `sections.base.nameText`              | 自定义名称文本（覆盖 GitHub 显示名称）                                   | -             |
+| `sections.base.disableName`           | 是否禁用名称显示                                                         | `false`       |
+| `sections.base.descriptionFontFamily` | 描述字体类名                                                             | -             |
+| `sections.base.descriptionSize`       | 描述字体大小 (`sm`/`base`/`lg`/`xl`/`2xl`)                               | -             |
+| `sections.base.descriptionText`       | 自定义描述文本（覆盖 GitHub 简介）                                       | -             |
+| `sections.base.disableDescription`    | 是否禁用描述显示                                                         | `false`       |
 
 #### Members Section Configuration (成员区域配置)
 
-| 字段 | 说明 | 默认值 |
-|------|------|--------|
-| `sections.members.enabled` | 是否显示成员区域 | `true` |
-| `sections.members.title.title` | 区域标题 | `"Group Members"` |
-| `sections.members.title.description` | 区域描述 | `"A young, active and innovative team"` |
-| `sections.members.title.accentColor` | 渐变色类名 | - |
-| `sections.members.countLabel` | 成员数量标签后缀 | `"members"` |
-| `sections.members.hiddenUsers` | 隐藏成员占位数量 | `0` |
-| `sections.members.owner` | 组织所有者用户名（显示特殊标识） | - |
-| `sections.members.appendUsers` | 额外添加的成员用户名列表 | `[]` |
-| `sections.members.separatorColor` | 分隔线颜色类名 | - |
+| 字段                                 | 说明                             | 默认值                                  |
+| ------------------------------------ | -------------------------------- | --------------------------------------- |
+| `sections.members.enabled`           | 是否显示成员区域                 | `true`                                  |
+| `sections.members.title.title`       | 区域标题                         | `"Group Members"`                       |
+| `sections.members.title.description` | 区域描述                         | `"A young, active and innovative team"` |
+| `sections.members.title.accentColor` | 渐变色类名                       | -                                       |
+| `sections.members.countLabel`        | 成员数量标签后缀                 | `"members"`                             |
+| `sections.members.hiddenUsers`       | 隐藏成员占位数量                 | `0`                                     |
+| `sections.members.owner`             | 组织所有者用户名（显示特殊标识） | -                                       |
+| `sections.members.appendUsers`       | 额外添加的成员用户名列表         | `[]`                                    |
+| `sections.members.separatorColor`    | 分隔线颜色类名                   | -                                       |
 
 #### Projects Section Configuration (项目区域配置)
 
-| 字段 | 说明 | 默认值 |
-|------|------|--------|
-| `sections.projects.enabled` | 是否显示项目区域 | `true` |
-| `sections.projects.title.title` | 区域标题 | `"Featured Projects"` |
-| `sections.projects.title.description` | 区域描述 | `"A collection of open source work and experiments"` |
-| `sections.projects.title.accentColor` | 渐变色类名 | - |
-| `sections.projects.emptyText` | 无项目时显示文字 | `"No projects found"` |
-| `sections.projects.hideViewAll` | 是否隐藏"查看全部仓库"链接 | `false` |
-| `sections.projects.hiddenRepos` | 要隐藏的仓库名称列表 | `[]` |
+| 字段                                  | 说明                       | 默认值                                               |
+| ------------------------------------- | -------------------------- | ---------------------------------------------------- |
+| `sections.projects.enabled`           | 是否显示项目区域           | `true`                                               |
+| `sections.projects.title.title`       | 区域标题                   | `"Featured Projects"`                                |
+| `sections.projects.title.description` | 区域描述                   | `"A collection of open source work and experiments"` |
+| `sections.projects.title.accentColor` | 渐变色类名                 | -                                                    |
+| `sections.projects.emptyText`         | 无项目时显示文字           | `"No projects found"`                                |
+| `sections.projects.hideViewAll`       | 是否隐藏"查看全部仓库"链接 | `false`                                              |
+| `sections.projects.hiddenRepos`       | 要隐藏的仓库名称列表       | `[]`                                                 |
 
 #### Footer Section Configuration (页脚配置)
 
-| 字段 | 说明 | 默认值 |
-|------|------|--------|
-| `sections.footer.enabled` | 是否显示页脚 | `true` |
-| `sections.footer.customText` | 自定义页脚文字 | - |
+| 字段                            | 说明                      | 默认值  |
+| ------------------------------- | ------------------------- | ------- |
+| `sections.footer.enabled`       | 是否显示页脚              | `true`  |
+| `sections.footer.customText`    | 自定义页脚文字            | -       |
 | `sections.footer.hideBuiltWith` | 是否隐藏"Built with" 署名 | `false` |
 
 ### 仓库过滤配置

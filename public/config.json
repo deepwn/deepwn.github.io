@@ -3,7 +3,7 @@
     "baseAccount": "deepwn",
     "type": "org",
     "website": {
-      "title": "deePwn = Developer + Researcher",
+      "title": "deePwn = DevOps + Pentest",
       "favicon": "/deepwn.png"
     }
   },
@@ -17,6 +17,13 @@
       "disableDescription": false,
       "scrollTipLabel": "Scroll Down"
     },
+    "projects": {
+      "title": {
+        "title": "Featured Projects",
+        "description": "A collection of our works"
+      },
+      "hiddenRepos": ["deepwn.github.io"]
+    },
     "members": {
       "title": {
         "title": "Group Members",
@@ -27,13 +34,6 @@
       "owner": "evil7",
       "appendUsers": ["sususu416"],
       "separatorColor": "border-white/10"
-    },
-    "projects": {
-      "title": {
-        "title": "Featured Projects",
-        "description": "A collection of our works"
-      },
-      "hiddenRepos": ["deepwn.github.io"]
     },
     "footer": {
       "customText": ""

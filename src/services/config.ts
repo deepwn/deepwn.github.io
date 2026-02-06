@@ -1,6 +1,6 @@
 /**
  * Simplified App Configuration
- * 
+ *
  * Structure:
  * 1. SiteConfig - Site data control (account, website info)
  * 2. ThemeConfig - Theme selection and overrides

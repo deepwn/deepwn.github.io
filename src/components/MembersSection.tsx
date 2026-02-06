@@ -1,7 +1,7 @@
-import type { GithubMember } from "@/services/github";
-import type { SectionTitleConfig } from "@/services/config";
-import { MemberNormalCard } from "@/components/MemberNormalCard";
-import { MemberHiddenCard } from "@/components/MemberHiddenCard";
+import type { GithubMember } from '@/services/github';
+import type { SectionTitleConfig } from '@/services/config';
+import { MemberNormalCard } from '@/components/MemberNormalCard';
+import { MemberHiddenCard } from '@/components/MemberHiddenCard';
 
 // Component-level config interface (matches config.ts structure)
 export interface MembersSectionConfig {
@@ -29,12 +29,7 @@ interface MembersSectionProps {
   config?: MembersSectionConfig;
 }
 
-export function MembersSection({ 
-  members, 
-  owner, 
-  hiddenUsers = 0,
-  config 
-}: MembersSectionProps) {
+export function MembersSection({ members, owner, hiddenUsers = 0, config }: MembersSectionProps) {
   if (!members || members.length === 0) {
     return null;
   }
@@ -57,11 +52,7 @@ export function MembersSection({
                 {title}
               </span>
             </h2>
-            {description && (
-              <p className="mt-2 text-xl text-gray-300">
-                {description}
-              </p>
-            )}
+            {description && <p className="mt-2 text-xl text-gray-300">{description}</p>}
           </div>
           <span className="text-xs md:text-sm text-gray-300 font-mono bg-white/5 px-3 py-1 rounded-full">
             {totalCount}
@@ -76,20 +67,12 @@ export function MembersSection({
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {/* Render regular members */}
           {members.map((member, index) => (
-            <MemberNormalCard
-              key={member.id}
-              member={member}
-              owner={owner}
-              index={index}
-            />
+            <MemberNormalCard key={member.id} member={member} owner={owner} index={index} />
           ))}
 
           {/* Hidden user placeholders */}
           {Array.from({ length: hiddenUsers }).map((_, index) => (
-            <MemberHiddenCard
-              key={`hidden-${index}`}
-              size={80}
-            />
+            <MemberHiddenCard key={`hidden-${index}`} size={80} />
           ))}
         </div>
       </div>

@@ -37,7 +37,7 @@ function App2() {
 
         // Handle new config structure (site object)
         const siteConfig = cfg.site || cfg;
-        
+
         // Determine account type from config first, fallback to 'user'
         const accountType: 'user' | 'org' = siteConfig.type === 'org' ? 'org' : 'user';
 
@@ -52,7 +52,9 @@ function App2() {
         // Fetch repos with resolved account type for correct API endpoint
         const hiddenRepos = cfg.sections?.projects?.hiddenRepos || [];
         setLoadingStage('get repos...');
-        const userRepos = await fetchRepos(siteConfig.baseAccount, resolvedAccountType, { hidden_repos: hiddenRepos });
+        const userRepos = await fetchRepos(siteConfig.baseAccount, resolvedAccountType, {
+          hidden_repos: hiddenRepos,
+        });
         setRepos(userRepos);
 
         // Fetch members only for organizations
@@ -63,7 +65,7 @@ function App2() {
 
             // Get members configuration
             const membersConfig = cfg.sections?.members;
-            
+
             const append_users = membersConfig?.appendUsers || [];
             const hidden_users = membersConfig?.hiddenUsers;
             const ownerUsername = membersConfig?.owner;
@@ -161,11 +163,18 @@ function App2() {
   const customBackground = themeConfig?.background;
 
   return (
-    <div className="relative w-full min-h-screen overflow-x-hidden font-sans text-white selection:bg-green-500/30" style={customBackground?.main ? { background: customBackground.main } : undefined}>
+    <div
+      className="relative w-full min-h-screen overflow-x-hidden font-sans text-white selection:bg-green-500/30"
+      style={customBackground?.main ? { background: customBackground.main } : undefined}
+    >
       {/* Background Animation - Fixed at bottom layer */}
       <div className="fixed inset-0 z-0">
         <GlitchScreen
-          glitchColors={customColors?.accent ? ['#2b4539', customColors.accent, '#61b3dc'] : ['#2b4539', '#61dca3', '#61b3dc']}
+          glitchColors={
+            customColors?.accent
+              ? ['#2b4539', customColors.accent, '#61b3dc']
+              : ['#2b4539', '#61dca3', '#61b3dc']
+          }
           glitchSpeed={60}
           smooth={true}
           outerVignette={true}
@@ -176,7 +185,10 @@ function App2() {
 
       {/* Custom background gradient override */}
       {customBackground?.gradient && (
-        <div className="fixed inset-0 z-0 pointer-events-none" style={{ background: customBackground.gradient }} />
+        <div
+          className="fixed inset-0 z-0 pointer-events-none"
+          style={{ background: customBackground.gradient }}
+        />
       )}
 
       {/* Main Content - Above background */}

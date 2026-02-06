@@ -27,7 +27,7 @@
         .then(config => {
           // Support both flat structure (config.website) and nested structure (config.site.website)
           const websiteConfig = config.website || config.site?.website;
-          
+
           if (websiteConfig) {
             if (websiteConfig.title) {
               document.title = websiteConfig.title;

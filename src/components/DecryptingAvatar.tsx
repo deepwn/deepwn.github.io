@@ -1,5 +1,5 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface DecryptingAvatarProps {
   /** Alt text for accessibility */
@@ -14,8 +14,8 @@ interface DecryptingAvatarProps {
   src?: string;
   /** Whether to use image mask for transparent pixel detection (default: true) */
   mask?: boolean;
-  /** Logo shape: 'circle' (rounded-full), 'square' (rounded-none), 'none' (original) */
-  shape?: 'circle' | 'square' | 'none';
+  /** Whether to preserve image aspect ratio (adjust height based on width) */
+  preserveAspectRatio?: boolean;
   /** Children element to display when decryption is complete */
   children?: React.ReactNode;
   /** Custom CSS class */
@@ -34,33 +34,30 @@ interface BlockState {
 }
 
 export function DecryptingAvatar({
-  alt = "Avatar",
+  alt = 'Avatar',
   size = 200,
   speed = 45,
   gridSize = 8,
   src,
   mask = true,
-  shape = 'circle',
+  preserveAspectRatio = false,
   children,
-  className = "",
+  className = '',
 }: DecryptingAvatarProps) {
-  // Determine border-radius class based on shape prop (default to circle if undefined)
-  const shapeClass = {
-    circle: 'rounded-full',
-    square: 'rounded-none',
-    none: '',
-  }[(shape as string) || 'circle'] || 'rounded-full';
+  // Height state for aspect ratio preservation
+  const [containerHeight, setContainerHeight] = useState<number | null>(null);
+
   // Initialize blocks with all blocks in "not revealed" state immediately
   // This ensures the encrypted/glitched state is visible from page load
   const [blocks, setBlocks] = useState<BlockState[]>(() => {
     const initialBlocks: BlockState[] = [];
-    const GLITCH_CHARS = "█▓▒░▀▄▌▐■□●○▫▲△▼▽◆◇◎◈★☆";
+    const GLITCH_CHARS = '█▓▒░▀▄▌▐■□●○▫▲△▼▽◆◇◎◈★☆';
 
     for (let i = 0; i < gridSize * gridSize; i++) {
       const row = Math.floor(i / gridSize);
       const col = i % gridSize;
       const randomOffset = Math.random() * 0.7;
-      const spatialOffset = (row + col) / (gridSize * 2) * 0.3;
+      const spatialOffset = ((row + col) / (gridSize * 2)) * 0.3;
 
       initialBlocks.push({
         id: i,
@@ -90,7 +87,7 @@ export function DecryptingAvatar({
   }, []);
 
   // ASCII characters for glitch effect
-  const GLITCH_CHARS = "█▓▒░▀▄▌▐■□●○▫▲△▼▽◆◇◎◈★☆";
+  const GLITCH_CHARS = '█▓▒░▀▄▌▐■□●○▫▲△▼▽◆◇◎◈★☆';
 
   // Generate blocks for decryption effect
   const generateBlocks = (hasContentMask: boolean[] | null): BlockState[] => {
@@ -102,7 +99,7 @@ export function DecryptingAvatar({
       const col = i % gridSize;
 
       const randomOffset = Math.random() * 0.7;
-      const spatialOffset = (row + col) / (gridSize * 2) * 0.3;
+      const spatialOffset = ((row + col) / (gridSize * 2)) * 0.3;
 
       newBlocks.push({
         id: i,
@@ -129,7 +126,7 @@ export function DecryptingAvatar({
 
     // Load image for mask analysis
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    img.crossOrigin = 'anonymous';
     img.src = src;
 
     img.onload = () => {
@@ -149,13 +146,18 @@ export function DecryptingAvatar({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     // Set canvas to image size for accurate pixel analysis
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
     ctx.drawImage(img, 0, 0);
+
+    // Update container height if preserving aspect ratio
+    if (preserveAspectRatio) {
+      setContainerHeight((img.naturalHeight / img.naturalWidth) * size);
+    }
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const pixels = imageData.data;
@@ -208,8 +210,8 @@ export function DecryptingAvatar({
         return;
       }
 
-      setBlocks((prevBlocks) =>
-        prevBlocks.map((block) => ({
+      setBlocks(prevBlocks =>
+        prevBlocks.map(block => ({
           ...block,
           isRevealed: block.revealOrder <= frame,
           charIndex: (block.charIndex + 1) % GLITCH_CHARS.length,
@@ -229,12 +231,14 @@ export function DecryptingAvatar({
     };
   }, [blocks.length, speed]);
 
-  const blockSize = size / gridSize;
+  const blockWidth = size / gridSize;
+  const currentHeight = preserveAspectRatio && containerHeight ? containerHeight : size;
+  const blockHeight = currentHeight / gridSize;
 
   return (
     <div
-      className={`relative ${className} ${shapeClass}`}
-      style={{ width: size, height: size }}
+      className={`relative overflow-hidden ${className}`}
+      style={{ width: size, height: currentHeight }}
       role="img"
       aria-label={alt}
     >
@@ -242,32 +246,34 @@ export function DecryptingAvatar({
       <canvas ref={canvasRef} className="hidden" />
 
       {/* Base layer - original content (z-0) - only visible during decryption or after completion */}
-      <div className={`absolute inset-0 z-0 overflow-hidden ${shapeClass} ${isDecrypting || isComplete ? "" : "hidden"}`}>
+      <div
+        className={`absolute inset-0 z-0 overflow-hidden ${isDecrypting || isComplete ? '' : 'hidden'}`}
+      >
         {children}
       </div>
 
       {/* Decryption effect overlay (z-10) */}
       <div
-        className={`absolute inset-0 z-10 grid ${shapeClass}`}
+        className={`absolute inset-0 z-10 grid`}
         style={{
           gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
           gridTemplateRows: `repeat(${gridSize}, 1fr)`,
         }}
       >
-        {blocks.map((block) => (
+        {blocks.map(block => (
           <div
             key={block.id}
             className="relative overflow-hidden"
             style={{
-              width: blockSize,
-              height: blockSize,
+              width: blockWidth,
+              height: blockHeight,
               transform: block.isRevealed
-                ? "translate(0, 0)"
+                ? 'translate(0, 0)'
                 : `translate(${block.offsetX}px, ${block.offsetY}px)`,
               opacity: block.isRevealed ? 0 : 1, // Revealed blocks are transparent to show base layer
-              transition: "opacity 0.3s ease-out",
+              transition: 'opacity 0.3s ease-out',
               // Hide blocks without content when decrypting
-              visibility: !block.hasContent && !block.isRevealed ? "hidden" : "visible",
+              visibility: !block.hasContent && !block.isRevealed ? 'hidden' : 'visible',
             }}
           >
             {/* Glitch character - shows when NOT revealed (covers the base layer) */}
@@ -275,8 +281,8 @@ export function DecryptingAvatar({
               <div
                 className="absolute inset-0 flex items-center justify-center text-xs font-mono"
                 style={{
-                  backgroundColor: block.colorInvert ? "#fff" : "#000",
-                  color: block.colorInvert ? "#000" : "#fff",
+                  backgroundColor: block.colorInvert ? '#fff' : '#000',
+                  color: block.colorInvert ? '#000' : '#fff',
                 }}
               >
                 {GLITCH_CHARS[block.charIndex % GLITCH_CHARS.length]}
@@ -288,9 +294,7 @@ export function DecryptingAvatar({
 
       {/* Complete overlay (z-20) - shows full original content after animation */}
       {isComplete && (
-        <div className={`absolute inset-0 z-20 overflow-hidden ${shapeClass}`}>
-          {children}
-        </div>
+        <div className="absolute inset-0 z-20 overflow-hidden">{children}</div>
       )}
     </div>
   );

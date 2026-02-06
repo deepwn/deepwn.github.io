@@ -87,7 +87,7 @@ export function BaseInfoText({
           {name}
         </h1>
       )}
-      
+
       {/* Bio with gradient - always show DecryptingText (shows encrypted state first, then reveals) */}
       {!disableDescription && (
         <div className={`${descriptionFontFamily || ''}`}>

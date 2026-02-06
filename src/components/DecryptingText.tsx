@@ -1,9 +1,8 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
-const CHARACTERS =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-+=[]{}|;:,.<>?";
+const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()-+=[]{}|;:,.<>?';
 
 interface DecryptingTextProps {
   targetText: string;
@@ -15,14 +14,14 @@ interface DecryptingTextProps {
 export const DecryptingText: React.FC<DecryptingTextProps> = ({
   targetText,
   speed = 30,
-  className = "",
+  className = '',
 }) => {
   // Generate initial random characters (encrypted state) - covers the original content
   const [currentText, setCurrentText] = useState<string>(() => {
     return targetText
-      .split("")
-      .map((char) => (char === " " ? " " : CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]))
-      .join("");
+      .split('')
+      .map(char => (char === ' ' ? ' ' : CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]))
+      .join('');
   });
   const revealIterationsRef = useRef<number[]>([]);
 
@@ -52,16 +51,16 @@ export const DecryptingText: React.FC<DecryptingTextProps> = ({
       if (!isMounted) return;
 
       const newText = targetText
-        .split("")
+        .split('')
         .map((char, index) => {
           // Reveal this character when iteration reaches its random start
           if (iteration >= revealIterations[index]) {
             return targetText[index];
           }
-          if (char === " ") return " ";
+          if (char === ' ') return ' ';
           return CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
         })
-        .join("");
+        .join('');
 
       setCurrentText(newText);
 

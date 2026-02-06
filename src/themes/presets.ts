@@ -4,38 +4,38 @@
  */
 
 export type ThemePreset =
-  | 'default'   // GitHub-style dark theme
-  | 'minimal'  // Clean, minimal dark theme
-  | 'hacker'   // Terminal/console style
-  | 'cyber';   // Neon cyberpunk style
+  | 'default' // GitHub-style dark theme
+  | 'minimal' // Clean, minimal dark theme
+  | 'hacker' // Terminal/console style
+  | 'cyber'; // Neon cyberpunk style
 
 export interface ThemeConfig {
   // Accent colors
   accent: {
-    primary: string;      // Main accent color class
-    secondary: string;    // Secondary accent
-    gradient: string;     // Gradient from-to classes
+    primary: string; // Main accent color class
+    secondary: string; // Secondary accent
+    gradient: string; // Gradient from-to classes
   };
 
   // Typography colors
   colors: {
-    heading: string;      // H1, H2, H3 colors
-    body: string;         // Body text color
-    muted: string;        // Muted/text-gray colors
+    heading: string; // H1, H2, H3 colors
+    body: string; // Body text color
+    muted: string; // Muted/text-gray colors
   };
 
   // UI elements
   ui: {
-    cardBg: string;       // Card background
-    cardBorder: string;   // Card border
-    badgeBg: string;      // Badge background
-    glowColor: string;    // Glow effect color
+    cardBg: string; // Card background
+    cardBorder: string; // Card border
+    badgeBg: string; // Badge background
+    glowColor: string; // Glow effect color
   };
 
   // Background
   background: {
-    main: string;        // Main background class
-    gradient: string;    // Background gradient
+    main: string; // Main background class
+    gradient: string; // Background gradient
   };
 }
 
@@ -158,7 +158,7 @@ export function getThemeWithOverrides(
   overrides?: Partial<ThemeConfig>
 ): ThemeConfig {
   const base = themes[preset] || themes.default;
-  
+
   if (!overrides) {
     return base;
   }
@@ -191,7 +191,7 @@ export function getEffectiveColors(
   colorOverrides?: { accent?: string; heading?: string; body?: string; muted?: string }
 ): ThemeConfig['colors'] {
   const baseColors = themes[preset]?.colors || themes.default.colors;
-  
+
   if (!colorOverrides) {
     return baseColors;
   }
@@ -210,7 +210,7 @@ export function getEffectiveBackground(
   bgOverrides?: { main?: string; gradient?: string }
 ): ThemeConfig['background'] {
   const baseBg = themes[preset]?.background || themes.default.background;
-  
+
   if (!bgOverrides) {
     return baseBg;
   }

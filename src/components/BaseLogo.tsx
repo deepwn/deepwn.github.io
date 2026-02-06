@@ -22,11 +22,12 @@ export function BaseLogo({ profile, customLogoSrc, logoScale = 1, logoShape }: B
   const scaledSize = baseSize * logoScale;
 
   // Determine border-radius class based on logoShape (default to circle if undefined)
-  const shapeClass = {
-    circle: 'rounded-full',
-    square: 'rounded-none',
-    none: '',
-  }[logoShape || 'circle'] || 'rounded-full';
+  const shapeClass =
+    {
+      circle: 'rounded-full',
+      square: 'rounded-none',
+      none: '',
+    }[logoShape || 'circle'] ?? 'rounded-full';
 
   return (
     <div className="relative inline-block">
@@ -39,17 +40,20 @@ export function BaseLogo({ profile, customLogoSrc, logoScale = 1, logoShape }: B
           speed={45}
           src={avatarSrc}
           mask={true}
-          shape={logoShape}
+          className={shapeClass}
+          preserveAspectRatio={logoShape === 'none'}
         >
           {/* Fallback content when animation completes */}
           {avatarSrc ? (
             <img
               src={avatarSrc}
               alt={avatarAlt}
-              className={`object-cover w-full h-full ${shapeClass}`}
+              className={`w-full h-full ${shapeClass} ${logoShape === 'none' ? 'object-contain' : 'object-cover'}`}
             />
           ) : (
-            <div className={`w-full h-full bg-gradient-to-br from-green-600 to-blue-600 flex items-center justify-center text-2xl font-bold ${shapeClass}`}>
+            <div
+              className={`w-full h-full bg-gradient-to-br from-green-600 to-blue-600 flex items-center justify-center text-2xl font-bold ${shapeClass}`}
+            >
               {avatarFallback}
             </div>
           )}

@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import type { GithubProfile, GithubRepo } from '@/services/github';
-import type { SectionTitleConfig } from "@/services/config";
+import type { SectionTitleConfig } from '@/services/config';
 import { ProjectCard } from './ProjectCard';
 
 // Component-level config interface (matches config.ts structure)
@@ -45,9 +45,7 @@ export const ProjectsSection = forwardRef<HTMLDivElement, ProjectsSectionProps>(
               </span>
             </h2>
             {description && (
-              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                {description}
-              </p>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto">{description}</p>
             )}
           </div>
 

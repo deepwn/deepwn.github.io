@@ -52,7 +52,14 @@ export function BaseSection({
 
       <div className="relative z-20 w-full max-w-6xl mx-auto text-center space-y-6 animate-fade-in-up">
         {/* Avatar with Glow Effect */}
-        {showLogo && <BaseLogo profile={profile} customLogoSrc={logoSrc} logoScale={logoScale} logoShape={logoShape} />}
+        {showLogo && (
+          <BaseLogo
+            profile={profile}
+            customLogoSrc={logoSrc}
+            logoScale={logoScale}
+            logoShape={logoShape}
+          />
+        )}
 
         {/* Name & Bio */}
         <BaseInfoText
