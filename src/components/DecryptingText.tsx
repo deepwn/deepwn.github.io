@@ -17,7 +17,13 @@ export const DecryptingText: React.FC<DecryptingTextProps> = ({
   speed = 30,
   className = "",
 }) => {
-  const [currentText, setCurrentText] = useState<string>("");
+  // Generate initial random characters (encrypted state) - covers the original content
+  const [currentText, setCurrentText] = useState<string>(() => {
+    return targetText
+      .split("")
+      .map((char) => (char === " " ? " " : CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]))
+      .join("");
+  });
   const revealIterationsRef = useRef<number[]>([]);
 
   // Generate random reveal iterations on mount

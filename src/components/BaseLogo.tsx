@@ -1,4 +1,5 @@
 import type { GithubProfile } from '@/services/github';
+import { DecryptingAvatar } from './DecryptingAvatar';
 
 interface BaseLogoProps {
   profile: GithubProfile | null;
@@ -21,22 +22,28 @@ export function BaseLogo({ profile, customLogoSrc, logoScale = 1 }: BaseLogoProp
   return (
     <div className="relative inline-block">
       <div className="relative">
-        {/* Avatar */}
-        <div
-          className="rounded-full overflow-hidden"
-          style={{
-            width: `${scaledSize}px`,
-            height: `${scaledSize}px`,
-          }}
+        {/* Avatar with DecryptingAvatar effect */}
+        <DecryptingAvatar
+          alt={avatarAlt}
+          size={scaledSize}
+          gridSize={8}
+          speed={45}
+          src={avatarSrc}
+          mask={true}
         >
+          {/* Fallback content when animation completes */}
           {avatarSrc ? (
-            <img src={avatarSrc} alt={avatarAlt} className="object-cover w-full h-full" />
+            <img
+              src={avatarSrc}
+              alt={avatarAlt}
+              className="object-cover w-full h-full rounded-full"
+            />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-green-600 to-blue-600 flex items-center justify-center text-2xl font-bold">
+            <div className="w-full h-full bg-gradient-to-br from-green-600 to-blue-600 flex items-center justify-center text-2xl font-bold rounded-full">
               {avatarFallback}
             </div>
           )}
-        </div>
+        </DecryptingAvatar>
       </div>
     </div>
   );
