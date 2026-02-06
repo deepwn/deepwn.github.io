@@ -1,162 +1,266 @@
 /**
- * App Configuration Interfaces
- * These interfaces define the structure of the config.json file
- * and are used throughout the application for customization.
+ * Simplified App Configuration
+ * 
+ * Structure:
+ * 1. SiteConfig - Site data control (account, website info)
+ * 2. ThemeConfig - Theme selection and overrides
+ * 3. SectionTitleConfig - Common title/description configuration
+ * 4. SectionsConfig - Section customization (titles, descriptions, labels)
+ * 5. AppConfig - Main config type combining all sections
  */
 
-// Website configuration (title, favicon, etc.)
-export interface WebsiteConfig {
-  /** Page title displayed in browser tab */
-  title?: string;
-  /** Favicon URL - relative path or full URL */
-  favicon?: string;
-}
+import type { ThemePreset } from '@/themes/presets';
 
-// Typography configuration for name display
-export interface TypographyConfig {
-  enabled: boolean;
-  fontSize: string;
-  fontSizeMd?: string;
-  fontSizeLg?: string;
-  color: string;
-  fontWeight?: string;
-  /** Vertical spacing between name and bio (default: 4) */
-  spacing?: number;
-  gradient?: {
-    enabled: boolean;
-    from: string;
-    via: string;
-    to: string;
-  };
-  glow?: {
-    enabled: boolean;
-    intensity: 'low' | 'medium' | 'high';
-  };
-  animation?: {
-    enabled: boolean;
-    type: 'pulse' | 'text-glow' | 'float';
+// ============================================================================
+// 1. Site Configuration - Core site data
+// ============================================================================
+
+export interface SiteConfig {
+  /** GitHub username or organization name (required) */
+  baseAccount: string;
+  /** Account type: 'user' or 'org' */
+  type?: 'user' | 'org';
+  /** Website metadata */
+  website?: {
+    /** Browser tab title */
+    title?: string;
+    /** Favicon path (relative to public folder) */
+    favicon?: string;
   };
 }
 
-// Typography configuration for bio text
-export interface BioTypographyConfig {
-  enabled: boolean;
-  fontSize: string;
-  fontSizeMd?: string;
-  color: string;
-  fontWeight: string;
-  /** Optional gradient for bio text */
-  gradient?: {
-    enabled: boolean;
-    from: string;
-    via?: string;
-    to: string;
+// ============================================================================
+// 2. Theme Configuration - Visual theme control
+// ============================================================================
+
+export interface ThemeConfig {
+  /** Theme preset name */
+  preset?: ThemePreset;
+  /** Override theme colors */
+  colors?: {
+    accent?: string;
+    heading?: string;
+    body?: string;
+    muted?: string;
   };
-  glow?: {
-    enabled: boolean;
-    intensity: 'low' | 'medium' | 'high';
-  };
-  animation?: {
-    enabled: boolean;
-    type: 'pulse' | 'text-glow' | 'float';
+  /** Override background */
+  background?: {
+    main?: string;
+    gradient?: string;
   };
 }
 
-// Logo configuration
-export interface LogoConfig {
-  enabled: boolean;
-  shape: 'circle' | 'square' | 'none';
-  border: boolean;
-  borderColor: string;
-  borderWidth: string;
-  /** Custom image URL to replace GitHub avatar - if set, this image is used instead of GitHub avatar */
-  src?: string;
-  /** Logo link URL - if set, logo becomes clickable link */
-  href?: string;
-  /** Logo size scale (default: 1) - multiplier for base size, e.g., 1.5 for 1.5x size */
-  scale?: number;
-  onlineIndicator: {
-    enabled: boolean;
-    color: string;
-  };
-}
+// ============================================================================
+// Repository Filter Configuration
+// ============================================================================
 
-// Team label typography configuration
-export interface TeamTypographyConfig {
-  enabled: boolean;
-  label: string;
-  fontSize: string;
-  fontSizeMd?: string;
-  fontWeight: string;
-  textColor: string;
-  background: string;
-  borderColor: string;
-  indicator?: {
-    enabled: boolean;
-    color: string;
-    animate: boolean;
-  };
-}
-
-// Complete typography settings
-export interface TypographySettings {
-  name: TypographyConfig;
-  bio: BioTypographyConfig;
-  logo: LogoConfig;
-  team: TeamTypographyConfig;
-}
-
-// Repository filtering configuration
 export interface RepoFilterConfig {
-  /** Array of repository names to hide (blacklist) - takes priority over whitelist */
+  /** Repository names to hide */
   hidden_repos?: string[];
-  /** Array of repository names to show (whitelist) - ignored if hidden_repos is set */
+  /** Repository names to list instead of all */
   listing_repos?: string[];
 }
 
-// Custom link button configuration
-export interface CustomLink {
-  /** Button label text */
-  label: string;
-  /** Target URL to navigate to */
-  url: string;
-  /** Lucide icon name (optional, without 'Icon' suffix) */
-  icon?: string;
-  /** Button style variant */
-  variant?: 'default' | 'outline' | 'ghost';
-  /** Custom color class */
-  color?: string;
+// ============================================================================
+// 3. Section Title Configuration
+// ============================================================================
+
+export interface SectionTitleConfig {
+  /** Section title text */
+  title?: string;
+  /** Section subtitle/description text */
+  description?: string;
+  /** Custom accent color class for gradient */
+  accentColor?: string;
 }
 
-// Custom links section configuration
-export interface CustomLinksConfig {
-  /** Whether to show custom links section */
-  enabled: boolean;
-  /** Array of custom link buttons */
-  links: CustomLink[];
+// ============================================================================
+// 4. Individual Section Configurations
+// ============================================================================
+
+export interface BaseSectionConfig {
+  /** Enable/disable the base/hero section */
+  enabled?: boolean;
+  /** Custom scroll tip label */
+  scrollTipLabel?: string;
+  /** Custom logo image URL */
+  logoSrc?: string;
+  /** Logo scale/zoom level (default: 1, e.g., 0.5-2) */
+  logoScale?: number;
+  /** Disable logo display */
+  disableLogo?: boolean;
+  /** Name font family class (e.g., 'font-sans', 'font-mono', 'font-serif') */
+  nameFontFamily?: string;
+  /** Name font size preset (sm, base, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl) */
+  nameSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl';
+  /** Custom name text (overrides GitHub profile name) */
+  nameText?: string;
+  /** Disable name display */
+  disableName?: boolean;
+  /** Description font family class */
+  descriptionFontFamily?: string;
+  /** Description font size preset */
+  descriptionSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl';
+  /** Custom description text (overrides GitHub profile bio) */
+  descriptionText?: string;
+  /** Disable description display */
+  disableDescription?: boolean;
 }
 
-// Member filtering and additional members configuration
-export interface MemberFilterConfig {
-  /** Array of GitHub usernames to append to the member list */
-  append_users?: string[];
-  /** Number of hidden/secret user placeholders to display */
-  hidden_users?: number;
-  /** Owner username who will be highlighted with a special indicator */
+export interface MembersSectionConfig {
+  /** Enable/disable the members section */
+  enabled?: boolean;
+  /** Section title and description */
+  title?: SectionTitleConfig;
+  /** Custom member count label suffix */
+  countLabel?: string;
+  /** Number of hidden/secret user placeholders */
+  hiddenUsers?: number;
+  /** Organization owner username (for special badge) */
   owner?: string;
+  /** Extra GitHub usernames to add to member list */
+  appendUsers?: string[];
+  /** Custom separator color class */
+  separatorColor?: string;
 }
 
-// Main application configuration
-export interface AppConfig {
-  baseAccount: string;
-  type?: 'user' | 'org';
-  /** Website configuration (title, favicon, etc.) */
-  website?: WebsiteConfig;
-  /** Repository filtering configuration */
-  repoFilter?: RepoFilterConfig;
-  /** Member filtering and additional members configuration */
-  memberFilter?: MemberFilterConfig;
-  /** Custom links configuration */
-  customLinks?: CustomLinksConfig;
-  typography?: Partial<TypographySettings>;
+export interface ProjectsSectionConfig {
+  /** Enable/disable the projects section */
+  enabled?: boolean;
+  /** Section title and description */
+  title?: SectionTitleConfig;
+  /** Text shown when no projects found */
+  emptyText?: string;
+  /** Hide the "View All Repositories" link */
+  hideViewAll?: boolean;
+  /** Repository names to hide */
+  hiddenRepos?: string[];
+  /** Custom view all link text */
+  viewAllText?: string;
 }
+
+export interface FooterSectionConfig {
+  /** Enable/disable the footer */
+  enabled?: boolean;
+  /** Custom footer text */
+  customText?: string;
+  /** Hide the "Built with" attribution */
+  hideBuiltWith?: boolean;
+}
+
+export interface CustomLink {
+  /** Link label */
+  label: string;
+  /** Link URL */
+  url: string;
+  /** Icon name (react-icons component name) */
+  icon?: string;
+}
+
+export interface CustomLinksSectionConfig {
+  /** Enable/disable the custom links section */
+  enabled?: boolean;
+  /** Section title and description */
+  title?: SectionTitleConfig;
+  /** Custom links array */
+  links?: CustomLink[];
+}
+
+// ============================================================================
+// 5. Main App Configuration
+// ============================================================================
+
+export interface AppConfig {
+  /** Site configuration (required) */
+  site: SiteConfig;
+  /** Theme configuration */
+  theme?: ThemeConfig;
+  /** Sections configuration */
+  sections?: {
+    /** Base/Hero section configuration */
+    base?: BaseSectionConfig;
+    /** Members section configuration */
+    members?: MembersSectionConfig;
+    /** Projects section configuration */
+    projects?: ProjectsSectionConfig;
+    /** Footer section configuration */
+    footer?: FooterSectionConfig;
+    /** Custom links section configuration */
+    customLinks?: CustomLinksSectionConfig;
+  };
+  /** Legacy configuration format for backward compatibility */
+  [key: string]: unknown;
+}
+
+// ============================================================================
+// Default Configuration
+// ============================================================================
+
+export const defaultConfig: Required<AppConfig> = {
+  site: {
+    baseAccount: '',
+    type: 'user',
+    website: {
+      title: 'GitHub Profile',
+      favicon: '/favicon.svg',
+    },
+  },
+  theme: {
+    preset: 'default',
+    colors: undefined,
+    background: undefined,
+  },
+  sections: {
+    base: {
+      enabled: true,
+      scrollTipLabel: 'More Info',
+      logoSrc: undefined,
+      logoScale: 1,
+      disableLogo: false,
+      nameFontFamily: undefined,
+      nameSize: undefined,
+      nameText: undefined,
+      disableName: false,
+      descriptionFontFamily: undefined,
+      descriptionSize: undefined,
+      descriptionText: undefined,
+      disableDescription: false,
+    },
+    members: {
+      enabled: true,
+      title: {
+        title: 'Group Members',
+        description: 'A young, active and innovative team',
+      },
+      countLabel: 'members',
+      hiddenUsers: 0,
+      appendUsers: [],
+    },
+    projects: {
+      enabled: true,
+      title: {
+        title: 'Featured Projects',
+        description: 'A collection of open source work and experiments',
+      },
+      emptyText: 'No projects found',
+      hideViewAll: false,
+      hiddenRepos: [],
+    },
+    footer: {
+      enabled: true,
+      customText: '',
+      hideBuiltWith: false,
+    },
+    customLinks: {
+      enabled: false,
+      links: [],
+    },
+  },
+};
+
+// ============================================================================
+// Theme Exports
+// ============================================================================
+
+export type { ThemePreset };
+export { themes, getTheme, getAccentGradient } from '@/themes/presets';

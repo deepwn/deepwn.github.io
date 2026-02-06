@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import { GlitchText } from "@/components/GlitchText";
+import { useState, useEffect } from 'react';
+import { GlitchText } from '@/components/GlitchText';
 
 interface LoadingScreenProps {
   message?: string;
   stage?: string;
 }
 
-export function LoadingScreen({ message = "Loading...", stage }: LoadingScreenProps) {
-  const [dots, setDots] = useState("");
+export function LoadingScreen({ message = 'Loading...', stage }: LoadingScreenProps) {
+  const [dots, setDots] = useState('');
 
   // Animate dots
   useEffect(() => {
     const interval = setInterval(() => {
-      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+      setDots(prev => (prev.length >= 3 ? '' : prev + '.'));
     }, 500);
     return () => clearInterval(interval);
   }, []);
@@ -30,17 +30,20 @@ export function LoadingScreen({ message = "Loading...", stage }: LoadingScreenPr
         <div className="relative">
           {/* Outer glow */}
           <div className="absolute inset-0 bg-green-500/20 blur-xl rounded-full animate-pulse" />
-          
+
           {/* Logo container */}
           <div className="relative w-24 h-24 flex items-center justify-center">
             {/* Spinning ring */}
             <div className="absolute inset-0 border-2 border-green-500/30 rounded-full">
               <div className="absolute inset-0 border-2 border-transparent border-t-green-500 rounded-full animate-spin" />
             </div>
-            
+
             {/* Inner ring */}
             <div className="absolute inset-4 border border-green-500/20 rounded-full">
-              <div className="absolute inset-0 border border-transparent border-b-blue-500/50 rounded-full animate-spin" style={{ animationDirection: "reverse", animationDuration: "1.5s" }} />
+              <div
+                className="absolute inset-0 border border-transparent border-b-blue-500/50 rounded-full animate-spin"
+                style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}
+              />
             </div>
 
             {/* Center icon */}
@@ -66,16 +69,10 @@ export function LoadingScreen({ message = "Loading...", stage }: LoadingScreenPr
         <div className="flex flex-col items-center space-y-3">
           <div className="flex items-center space-x-2">
             <GlitchText text={message} />
-            <span className="text-green-500 font-mono text-lg w-12 text-left">
-              {dots}
-            </span>
+            <span className="text-green-500 font-mono text-lg w-12 text-left">{dots}</span>
           </div>
           {/* Stage indicator */}
-          {stage && (
-            <div className="text-xs text-gray-500 font-mono animate-pulse">
-              {stage}
-            </div>
-          )}
+          {stage && <div className="text-xs text-gray-500 font-mono animate-pulse">{stage}</div>}
         </div>
 
         {/* Progress bar */}
@@ -149,9 +146,7 @@ export function LoadingError({ message, errorDetails, onRetry }: LoadingErrorPro
         {/* Error text */}
         <div className="space-y-1">
           <GlitchText text="ERROR" color="text-red-400" />
-          <p className="text-gray-300 font-mono text-sm">
-            {message}
-          </p>
+          <p className="text-gray-300 font-mono text-sm">{message}</p>
         </div>
 
         {/* Collapsible error details */}
@@ -161,7 +156,7 @@ export function LoadingError({ message, errorDetails, onRetry }: LoadingErrorPro
               onClick={() => setShowDetails(!showDetails)}
               className="flex items-center justify-center w-full gap-2 px-4 py-2 text-xs font-mono text-gray-500 hover:text-gray-300 transition-colors"
             >
-              <span>{showDetails ? "↓ Hide details" : "→ Show details"}</span>
+              <span>{showDetails ? '↓ Hide details' : '→ Show details'}</span>
             </button>
 
             {showDetails && (

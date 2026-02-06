@@ -1,73 +1,69 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 // Glitch character set - tech/matrix style (auto generated unicode symbols)
 const GLITCH_CHARS: string[] = [
-  "█",
-  "▓",
-  "▒",
-  "░",
-  "▄",
-  "▀",
-  "■",
-  "□",
-  "▲",
-  "△",
-  "◆",
-  "◇",
-  "◈",
-  "◉",
-  "★",
-  "☆",
-  "☼",
-  "☾",
-  "♠",
-  "♣",
-  "♥",
-  "♦",
-  "†",
-  "‡",
-  "§",
-  "¶",
-  "©",
-  "®",
-  "∑",
-  "∏",
-  "√",
-  "∞",
-  "∫",
-  "≈",
-  "≠",
-  "≤",
-  "≥",
-  "α",
-  "β",
-  "γ",
-  "δ",
-  "ε",
-  "ζ",
-  "η",
-  "θ",
-  "λ",
-  "μ",
-  "⌘",
-  "⌥",
-  "⎔",
-  "⌨",
-  "◊",
-  "©",
-  "™",
-  "◦",
-  "•",
-  "○",
-  "▶",
-  "◀",
-  "◈",
-  "▣",
-  "▤",
-  "▥",
-  "▦",
-  "▧",
-  "▨"
+  '█',
+  '▓',
+  '▒',
+  '░',
+  '▄',
+  '▀',
+  '■',
+  '□',
+  '▲',
+  '△',
+  '◆',
+  '◇',
+  '◈',
+  '◉',
+  '★',
+  '☆',
+  '☼',
+  '☾',
+  '†',
+  '‡',
+  '§',
+  '¶',
+  '©',
+  '®',
+  '∑',
+  '∏',
+  '√',
+  '∞',
+  '∫',
+  '≈',
+  '≠',
+  '≤',
+  '≥',
+  'α',
+  'β',
+  'γ',
+  'δ',
+  'ε',
+  'ζ',
+  'η',
+  'θ',
+  'λ',
+  'μ',
+  '⌘',
+  '⌥',
+  '⎔',
+  '⌨',
+  '◊',
+  '©',
+  '™',
+  '◦',
+  '•',
+  '○',
+  '▶',
+  '◀',
+  '◈',
+  '▣',
+  '▤',
+  '▥',
+  '▦',
+  '▧',
+  '▨',
 ];
 
 interface GlitchTextProps {
@@ -78,7 +74,13 @@ interface GlitchTextProps {
   fontSize?: string;
 }
 
-export function GlitchText({ text, color = "text-green-400", fontFamily = "font-mono", letterSpacing = "tracking-wider", fontSize = "text-lg" }: GlitchTextProps) {
+export function GlitchText({
+  text,
+  color = 'text-green-400',
+  fontFamily = 'font-mono',
+  letterSpacing = 'tracking-wider',
+  fontSize = 'text-lg',
+}: GlitchTextProps) {
   const [displayedText, setDisplayedText] = useState(text);
   const [isGlitching, setIsGlitching] = useState(false);
 
@@ -94,7 +96,7 @@ export function GlitchText({ text, color = "text-green-400", fontFamily = "font-
         setIsGlitching(true);
 
         // Generate glitched text: replace 1-2 random characters
-        const chars = text.split("");
+        const chars = text.split('');
         const glitchCount = Math.random() > 0.5 ? 1 : 2; // 50% chance of 1 or 2 chars
         const positions: number[] = [];
 
@@ -112,7 +114,7 @@ export function GlitchText({ text, color = "text-green-400", fontFamily = "font-
           return char;
         });
 
-        setDisplayedText(glitchedChars.join(""));
+        setDisplayedText(glitchedChars.join(''));
 
         // Glitch duration: 50ms to 150ms
         const glitchDuration = Math.floor(Math.random() * 100) + 50;
@@ -136,6 +138,10 @@ export function GlitchText({ text, color = "text-green-400", fontFamily = "font-
   }, [text]);
 
   return (
-    <span className={`${color} ${fontFamily} ${letterSpacing} ${fontSize} ${isGlitching ? "opacity-80" : "opacity-100"} transition-opacity duration-75`}>{displayedText}</span>
+    <span
+      className={`${color} ${fontFamily} ${letterSpacing} ${fontSize} ${isGlitching ? 'opacity-80' : 'opacity-100'} transition-opacity duration-75`}
+    >
+      {displayedText}
+    </span>
   );
 }

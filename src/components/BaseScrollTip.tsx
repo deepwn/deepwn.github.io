@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef } from "react";
-import { ChevronDown } from "lucide-react";
+import { useState, useEffect, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
 
-interface ScrollIndicatorProps {
+interface BaseScrollTipProps {
   label?: string;
   onClick?: () => void;
   scrollThreshold?: number;
 }
 
-export function ScrollIndicator({
-  label = "More Info",
+export function BaseScrollTip({
+  label = 'More Info',
   onClick,
   scrollThreshold = 100,
-}: ScrollIndicatorProps) {
+}: BaseScrollTipProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [hasScrolled, setHasScrolled] = useState(false);
   const lastScrollY = useRef(0);
@@ -19,23 +19,23 @@ export function ScrollIndicator({
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Hide after scrolling past threshold
       if (currentScrollY > scrollThreshold) {
         setIsVisible(false);
         setHasScrolled(true);
-      } 
+      }
       // Show again if user scrolls back up
       else if (currentScrollY < 50 && hasScrolled) {
         setIsVisible(true);
         setTimeout(() => setHasScrolled(false), 1000);
       }
-      
+
       lastScrollY.current = currentScrollY;
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [scrollThreshold, hasScrolled]);
 
   // Auto-hide after initial load delay
@@ -61,18 +61,15 @@ export function ScrollIndicator({
         cursor-pointer
         transition-all duration-500 ease-out
         hover:text-white
-        ${hasScrolled ? "opacity-0 translate-y-4 pointer-events-none" : "opacity-100 translate-y-0"}
+        ${hasScrolled ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}
       `}
       aria-label={label}
     >
       {/* Label */}
       <span className="tracking-widest uppercase">{label}</span>
-      
+
       {/* Arrow */}
-      <ChevronDown 
-        size={20} 
-        className="animate-bounce-slow" 
-      />
+      <ChevronDown size={20} className="animate-bounce-slow" />
     </button>
   );
 }

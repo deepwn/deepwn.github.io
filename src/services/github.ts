@@ -106,7 +106,10 @@ async function fetchWithEnhanced<T>(
           return graphqlResult; // GraphQL provides richer data
         }
       } catch (error) {
-        console.debug(`[API] ℹ ${dataName} GraphQL enhancement skipped:`, error instanceof Error ? error.message : error);
+        console.debug(
+          `[API] ℹ ${dataName} GraphQL enhancement skipped:`,
+          error instanceof Error ? error.message : error
+        );
       }
     }
 
@@ -236,9 +239,12 @@ const MEMBERS_QUERY = `
 `;
 
 // GraphQL fetchers
-const fetchProfileGraphQL = async (username: string, type: 'user' | 'org'): Promise<GithubProfile | null> => {
+const fetchProfileGraphQL = async (
+  username: string,
+  type: 'user' | 'org'
+): Promise<GithubProfile | null> => {
   const query = type === 'org' ? ORG_PROFILE_QUERY : PROFILE_QUERY;
-  
+
   const data = await fetchGraphQL<{
     user?: {
       login: string;
@@ -278,19 +284,19 @@ const fetchProfileGraphQL = async (username: string, type: 'user' | 'org'): Prom
 
   // Handle both user and organization responses
   const userData = data.user || (data.organization as typeof data.user);
-  
+
   if (!userData) return null;
 
   return {
     login: userData.login,
     name: userData.name || userData.login,
     avatar_url: userData.avatarUrl,
-    bio: userData.bio || (data.organization?.description || ''),
+    bio: userData.bio || data.organization?.description || '',
     html_url: userData.url,
     public_repos: userData.publicRepos,
     // Organizations don't have followers/following fields
-    followers: type === 'user' ? (userData.followers?.totalCount || 0) : 0,
-    following: type === 'user' ? (userData.following?.totalCount || 0) : 0,
+    followers: type === 'user' ? userData.followers?.totalCount || 0 : 0,
+    following: type === 'user' ? userData.following?.totalCount || 0 : 0,
     location: userData.location || '',
     blog: userData.websiteUrl || '',
     company: userData.company || '',
@@ -304,7 +310,7 @@ const fetchProfileGraphQL = async (username: string, type: 'user' | 'org'): Prom
 
 const fetchReposGraphQL = async (username: string, type: 'user' | 'org'): Promise<GithubRepo[]> => {
   const query = type === 'org' ? ORG_REPOS_QUERY : REPOS_QUERY;
-  
+
   // Define the actual GraphQL response type
   interface GraphQLRepoNode {
     id: number;
@@ -326,9 +332,8 @@ const fetchReposGraphQL = async (username: string, type: 'user' | 'org'): Promis
 
   if (!data) return [];
 
-  const reposData = type === 'org'
-    ? data.organization?.repositories?.nodes
-    : data.user?.repositories?.nodes;
+  const reposData =
+    type === 'org' ? data.organization?.repositories?.nodes : data.user?.repositories?.nodes;
 
   if (!reposData) return [];
 
@@ -370,23 +375,31 @@ const fetchMembersGraphQL = async (orgName: string): Promise<GithubMember[]> => 
   }));
 };
 
-export const fetchProfile = async (username: string, type: 'user' | 'org' = 'user'): Promise<GithubProfile> => {
+export const fetchProfile = async (
+  username: string,
+  type: 'user' | 'org' = 'user'
+): Promise<GithubProfile> => {
   return fetchWithEnhanced<GithubProfile>(
     async (): Promise<GithubProfile> => {
-      const endpoint = type === 'org'
-        ? `https://api.github.com/orgs/${username}`
-        : `https://api.github.com/users/${username}`;
+      const endpoint =
+        type === 'org'
+          ? `https://api.github.com/orgs/${username}`
+          : `https://api.github.com/users/${username}`;
 
       const response = await fetch(endpoint, {
         headers: {
-          'Accept': 'application/vnd.github+json',
+          Accept: 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
-          ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
-        }
+          ...(import.meta.env?.VITE_GITHUB_TOKEN && {
+            Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+          }),
+        },
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch ${type} profile: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch ${type} profile: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
@@ -423,16 +436,19 @@ export const fetchRepos = async (
 ): Promise<GithubRepo[]> => {
   const repos = await fetchWithEnhanced<GithubRepo[]>(
     async () => {
-      const endpoint = type === 'org'
-        ? `https://api.github.com/orgs/${username}/repos?sort=updated&per_page=100`
-        : `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`;
+      const endpoint =
+        type === 'org'
+          ? `https://api.github.com/orgs/${username}/repos?sort=updated&per_page=100`
+          : `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`;
 
       const response = await fetch(endpoint, {
         headers: {
-          'Accept': 'application/vnd.github+json',
+          Accept: 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
-          ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
-        }
+          ...(import.meta.env?.VITE_GITHUB_TOKEN && {
+            Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+          }),
+        },
       });
 
       if (!response.ok) {
@@ -468,9 +484,9 @@ export const fetchRepos = async (
 
     // Blacklist takes priority if both are set
     if (hidden_repos && hidden_repos.length > 0) {
-      return sortedRepos.filter((repo) => !hidden_repos.includes(repo.name));
+      return sortedRepos.filter(repo => !hidden_repos.includes(repo.name));
     } else if (listing_repos && listing_repos.length > 0) {
-      return sortedRepos.filter((repo) => listing_repos.includes(repo.name));
+      return sortedRepos.filter(repo => listing_repos.includes(repo.name));
     }
   }
 
@@ -491,10 +507,12 @@ export const fetchMembers = async (orgName: string): Promise<GithubMember[]> => 
     async () => {
       const response = await fetch(`https://api.github.com/orgs/${orgName}/members?per_page=100`, {
         headers: {
-          'Accept': 'application/vnd.github+json',
+          Accept: 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
-          ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
-        }
+          ...(import.meta.env?.VITE_GITHUB_TOKEN && {
+            Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+          }),
+        },
       });
 
       if (!response.ok) {
@@ -529,10 +547,12 @@ export const fetchUserByUsername = async (username: string): Promise<GithubMembe
 
   const response = await fetch(endpoint, {
     headers: {
-      'Accept': 'application/vnd.github+json',
+      Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
-      ...(import.meta.env?.VITE_GITHUB_TOKEN && { 'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}` })
-    }
+      ...(import.meta.env?.VITE_GITHUB_TOKEN && {
+        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+      }),
+    },
   });
 
   if (!response.ok) {

@@ -2,7 +2,8 @@
 
 一个基于 React + TypeScript + Tailwind CSS 构建的现代化 GitHub 组织/个人主页模板。
 
-[查看示例](https://deepwn.github.io) · [配置文档](./public/config.example.md) · [快速开始](#部署到-github-pages)
+[查看示例](https://deepwn.github.io) · [配置文档](./public/config.example.md) ·
+[快速开始](#部署到-github-pages)
 
 ---
 
@@ -313,11 +314,11 @@ deepwn.github.io/
 │   └── favicon.svg          # 网站图标
 ├── src/
 │   ├── components/
-│   │   ├── AvatarWithGlow.tsx   # 头像组件
+│   │   ├── BaseLogo.tsx   # 头像组件
 │   │   ├── CustomLinks.tsx      # 自定义链接
 │   │   ├── Footer.tsx           # 页脚
-│   │   ├── HeroSection.tsx      # 主要区域
-│   │   ├── NameSection.tsx      # 名称展示
+│   │   ├── BaseSection.tsx      # 主要区域
+│   │   ├── BaseInfoText.tsx      # 名称展示
 │   │   ├── ProjectsSection.tsx  # 项目展示
 │   │   ├── TeamSection.tsx      # 团队标签
 │   │   └── ui/                  # 基础 UI 组件

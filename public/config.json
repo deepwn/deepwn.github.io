@@ -1,74 +1,41 @@
 {
-  "baseAccount": "deepwn",
-  "type": "org",
-  "website": {
-    "title": "deePwn = Developer + Researcher",
-    "favicon": "/deepwn.png"
-  },
-  "typography": {
-    "name": {
-      "enabled": false,
-      "fontSize": "text-5xl",
-      "fontSizeMd": "md:text-7xl",
-      "fontSizeLg": "lg:text-8xl",
-      "fontWeight": "font-bold"
-    },
-    "bio": {
-      "enabled": true,
-      "fontSize": "text-lg",
-      "fontSizeMd": "md:text-xl",
-      "fontWeight": "font-medium",
-      "textColor": "text-gray-300",
-      "glow": {
-        "enabled": true,
-        "intensity": "low"
-      },
-      "animation": {
-        "enabled": true,
-        "type": "text-glow"
-      }
-    },
-    "logo": {
-      "enabled": true,
-      "shape": "none",
-      "src": "/deepwn1-01.png",
-      "scale": 2,
-      "onlineIndicator": {
-        "enabled": false,
-        "color": "green"
-      }
-    },
-    "team": {
-      "enabled": true,
-      "label": "Open to Collaborations",
-      "fontSize": "text-sm",
-      "fontSizeMd": "md:text-base",
-      "fontWeight": "font-medium",
-      "textColor": "text-gray-200",
-      "background": "bg-black/10",
-      "borderColor": "border-white/10",
-      "indicator": {
-        "enabled": true,
-        "color": "green",
-        "animate": true
-      }
+  "site": {
+    "baseAccount": "deepwn",
+    "type": "org",
+    "website": {
+      "title": "deePwn = Developer + Researcher",
+      "favicon": "/deepwn.png"
     }
   },
-  "repoFilter": {
-    "hidden_repos": ["deepwn.github.io"]
-  },
-  "memberFilter": {
-    "append_users": ["sususu416"],
-    "hidden_users": 9,
-    "owner": "evil7"
-  },
-  "customLinks": {
-    "enabled": true,
-    "links": [
-      { "label": "GitHub", "url": "https://github.com/deepwn", "icon": "FaGithub" },
-      { "label": "Email", "url": "mailto:admin@deepwn.com", "icon": "FaEnvelope" },
-      { "label": "X (Twitter)", "url": "https://x.com/evil7x", "icon": "SiX" },
-      { "label": "Contact", "url": "https://github.com/orgs/deepwn/discussions", "icon": "FaComments" }
-    ]
+  "sections": {
+    "base": {
+      "logoScale": 2,
+      "logoSrc": "/deepwn1-01.png",
+      "disableLogo": false,
+      "disableName": true,
+      "disableDescription": false,
+      "scrollTipLabel": "Scroll Down"
+    },
+    "members": {
+      "title": {
+        "title": "Group Members",
+        "description": "A young, active and innovative team"
+      },
+      "countLabel": "members",
+      "hiddenUsers": 8,
+      "owner": "evil7",
+      "appendUsers": ["sususu416"],
+      "separatorColor": "border-white/10"
+    },
+    "projects": {
+      "title": {
+        "title": "Featured Projects",
+        "description": "A collection of our works"
+      },
+      "hiddenRepos": ["deepwn.github.io"]
+    },
+    "footer": {
+      "customText": ""
+    }
   }
 }

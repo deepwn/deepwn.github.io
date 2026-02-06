@@ -10,13 +10,13 @@
       function getFaviconMimeType(url) {
         const extension = url.split('.').pop()?.toLowerCase();
         const mimeTypes = {
-          'svg': 'image/svg+xml',
-          'png': 'image/png',
-          'ico': 'image/x-icon',
-          'jpg': 'image/jpeg',
-          'jpeg': 'image/jpeg',
-          'gif': 'image/gif',
-          'webp': 'image/webp'
+          svg: 'image/svg+xml',
+          png: 'image/png',
+          ico: 'image/x-icon',
+          jpg: 'image/jpeg',
+          jpeg: 'image/jpeg',
+          gif: 'image/gif',
+          webp: 'image/webp',
         };
         return mimeTypes[extension] || 'image/x-icon';
       }
@@ -25,15 +25,18 @@
       fetch('/config.json')
         .then(r => r.json())
         .then(config => {
-          if (config.website) {
-            if (config.website.title) {
-              document.title = config.website.title;
+          // Support both flat structure (config.website) and nested structure (config.site.website)
+          const websiteConfig = config.website || config.site?.website;
+          
+          if (websiteConfig) {
+            if (websiteConfig.title) {
+              document.title = websiteConfig.title;
             }
-            if (config.website.favicon) {
+            if (websiteConfig.favicon) {
               const faviconLink = document.getElementById('dynamic-favicon');
               if (faviconLink) {
-                faviconLink.setAttribute('href', config.website.favicon);
-                faviconLink.setAttribute('type', getFaviconMimeType(config.website.favicon));
+                faviconLink.setAttribute('href', websiteConfig.favicon);
+                faviconLink.setAttribute('type', getFaviconMimeType(websiteConfig.favicon));
               }
             }
           }

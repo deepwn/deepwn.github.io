@@ -1,42 +1,42 @@
-import { useState, useEffect } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { GlitchText } from "@/components/GlitchText";
-import { FaUserSecret, FaLock } from "react-icons/fa";
+import { useState, useEffect } from 'react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { GlitchText } from '@/components/GlitchText';
+import { FaUserSecret, FaLock } from 'react-icons/fa';
 
 // Glitch character set for the question mark effect
 const GLITCH_CHARS: string[] = [
-  "?",
-  "¿",
-  "⁇",
-  "⁈",
-  "⁉",
-  "◊",
-  "◇",
-  "◆",
-  "○",
-  "●",
-  "□",
-  "■",
-  "▲",
-  "△",
-  "▼",
-  "▽",
-  "★",
-  "☆",
-  "◉",
-  "◈",
-  "▣",
-  "▤",
-  "▥",
-  "▦",
-  "▧",
-  "▨",
-  "▓",
-  "▒",
-  "░",
-  "█",
-  "▄",
-  "▀",
+  '?',
+  '¿',
+  '⁇',
+  '⁈',
+  '⁉',
+  '◊',
+  '◇',
+  '◆',
+  '○',
+  '●',
+  '□',
+  '■',
+  '▲',
+  '△',
+  '▼',
+  '▽',
+  '★',
+  '☆',
+  '◉',
+  '◈',
+  '▣',
+  '▤',
+  '▥',
+  '▦',
+  '▧',
+  '▨',
+  '▓',
+  '▒',
+  '░',
+  '█',
+  '▄',
+  '▀',
 ];
 
 interface GlitchAvatarProps {
@@ -48,29 +48,29 @@ interface GlitchAvatarProps {
   anonymous?: boolean;
 }
 
-export function GlitchAvatar({ username = "?", size = 80, anonymous = false }: GlitchAvatarProps) {
-  const [fallbackChar, setFallbackChar] = useState("?");
+export function GlitchAvatar({ username = '?', size = 80, anonymous = false }: GlitchAvatarProps) {
+  const [fallbackChar, setFallbackChar] = useState('?');
 
   // Update display name with glitch effect
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (anonymous) {
-        // For anonymous mode, randomize the icon
-        setFallbackChar(GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]);
-      } else if (username === "?") {
-        // For question mark avatar, randomize the char
-        setFallbackChar(GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]);
-      }
-    }, 100 + Math.random() * 200); // Random interval 100-300ms
+    const interval = setInterval(
+      () => {
+        if (anonymous) {
+          // For anonymous mode, randomize the icon
+          setFallbackChar(GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]);
+        } else if (username === '?') {
+          // For question mark avatar, randomize the char
+          setFallbackChar(GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]);
+        }
+      },
+      100 + Math.random() * 200
+    ); // Random interval 100-300ms
 
     return () => clearInterval(interval);
   }, [username, anonymous]);
 
   return (
-    <Avatar
-      className="relative"
-      style={{ width: size, height: size }}
-    >
+    <Avatar className="relative" style={{ width: size, height: size }}>
       {/* Anonymous user icon or question mark */}
       <AvatarFallback
         className="bg-gray-800 text-gray-400 font-mono"
@@ -88,15 +88,15 @@ export function GlitchAvatar({ username = "?", size = 80, anonymous = false }: G
 }
 
 // Hidden user placeholder card component
-interface HiddenUserCardProps {
+interface MemberHiddenCardProps {
   size?: number;
 }
 
-export function HiddenUserCard({ size = 80 }: HiddenUserCardProps) {
+export function MemberHiddenCard({ size = 80 }: MemberHiddenCardProps) {
   const [glitchName] = useState(() => {
     const length = 5 + Math.floor(Math.random() * 6); // 5-10 characters
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
-    let result = "";
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+    let result = '';
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -108,11 +108,7 @@ export function HiddenUserCard({ size = 80 }: HiddenUserCardProps) {
       <div className="flex flex-col items-center text-center animate-pulse">
         {/* Anonymous Avatar */}
         <div className="relative mb-4">
-          <GlitchAvatar
-            username="?"
-            size={size}
-            anonymous={true}
-          />
+          <GlitchAvatar username="?" size={size} anonymous={true} />
           {/* Lock icon indicator */}
           <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-gray-600">
             <FaLock className="text-white text-xs" />
@@ -131,7 +127,9 @@ export function HiddenUserCard({ size = 80 }: HiddenUserCardProps) {
         </h3>
 
         {/* Role Label */}
-        <p className="text-xs text-gray-600 group-hover:text-gray-500 transition-colors duration-200">???</p>
+        <p className="text-xs text-gray-600 group-hover:text-gray-500 transition-colors duration-200">
+          ???
+        </p>
       </div>
     </div>
   );
