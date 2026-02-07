@@ -89,7 +89,7 @@ export function BaseSection({
               className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 text-sm text-gray-300 hover:text-white backdrop-blur-sm"
             >
               <FaEnvelope className="w-4 h-4 mr-2" />
-              {profile.email}
+              Mail
             </a>
           )}
           {profile?.html_url && (
@@ -111,7 +111,7 @@ export function BaseSection({
               className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 text-sm text-gray-300 hover:text-white backdrop-blur-sm"
             >
               <FaTwitter className="w-4 h-4 mr-2" />
-              Twitter
+              X (Twitter)
             </a>
           )}
         </div>
